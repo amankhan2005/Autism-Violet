@@ -1,0 +1,24 @@
+ {
+  "name": "safehome-backend",
+  "version": "1.0.0",
+  "description": "SAFE HOME OF MARYLAND Backend API",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": ["node", "express", "mongodb", "backend"],
+  "author": "safehome",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.6",
+    "dotenv": "^17.3.1",
+    "express": "^5.2.1",
+    "mongoose": "^9.3.1",
+    "resend": "^6.9.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
