@@ -2,25 +2,39 @@
 
 export const submitContact = async (req, res, next) => {
   try {
-    const { name, email, phone, message } = req.body;
+    let { name, email, phone, message } = req.body;
 
-    // ✅ Fast validation
-    if (![name, email, message].every(Boolean)) {
+    // ✅ Trim inputs
+    name = name?.trim();
+    email = email?.trim();
+    message = message?.trim();
+
+    // ✅ Validation
+    if (!name || !email || !message) {
       return res.status(400).json({
         success: false,
-        message: "Name, email and message are required"
+        message: "Name, email and message are required",
       });
     }
 
-    // ✅ Save contact
+    // ✅ Email format check (basic)
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid email format",
+      });
+    }
+
+    // ✅ Save to DB
     const contact = await Contact.create({
       name,
       email,
       phone,
-      message
+      message,
     });
 
-    // ✅ Clean response (secure)
+    // ✅ Response (safe)
     return res.status(201).json({
       success: true,
       message: "Your message has been sent successfully",
@@ -28,11 +42,11 @@ export const submitContact = async (req, res, next) => {
         id: contact._id,
         name: contact.name,
         email: contact.email,
-        createdAt: contact.createdAt
-      }
+        createdAt: contact.createdAt,
+      },
     });
 
   } catch (error) {
-    next(error); // 🔥 error middleware handle karega
+    next(error);
   }
 };

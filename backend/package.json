@@ -1,7 +1,7 @@
  {
-  "name": "safehome-backend",
+  "name": "vital-trust-health-backend",
   "version": "1.0.0",
-  "description": "SAFE HOME OF MARYLAND Backend API",
+  "description": "Vital Trust Health Backend API",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -9,7 +9,7 @@
     "dev": "nodemon server.js"
   },
   "keywords": ["node", "express", "mongodb", "backend"],
-  "author": "safehome",
+  "author": "vital-trust-health",
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.6",

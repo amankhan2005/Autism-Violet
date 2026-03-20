@@ -7,8 +7,8 @@ const app = express();
 
 app.use(cors({
   origin: [
-    "https://safehomeofmaryland.netlify.app",
-    "https://safehomeofmaryland.com"
+    "https://s om etlify.app",
+    "https "
   ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
