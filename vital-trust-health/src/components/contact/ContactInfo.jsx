@@ -31,7 +31,7 @@
 
         {/* Phone */}
         <a
-          href="tel:14106527070"
+          href="tel:+14438383955"
           className="flex items-start gap-4 group"
         >
           <div className="bg-teal-50 text-[#3EB8A7] p-3 rounded-xl group-hover:bg-[#F97316] group-hover:text-white transition-all duration-300">
@@ -40,14 +40,14 @@
           <div>
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Phone Number</p>
             <p className="text-slate-700 font-medium group-hover:text-[#F97316] transition-colors">
-              410-652-7070
+              +1 (443) 838-3955
             </p>
           </div>
         </a>
 
         {/* Email */}
         <a
-          href="mailto:info@vitaltrusthealth.com"
+          href="mailto:vitaltrusth@gmail.com"
           className="flex items-start gap-4 group"
         >
           <div className="bg-teal-50 text-[#3EB8A7] p-3 rounded-xl group-hover:bg-[#F97316] group-hover:text-white transition-all duration-300">
@@ -56,7 +56,7 @@
           <div>
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Email Address</p>
             <p className="text-slate-700 font-medium group-hover:text-[#F97316] transition-colors">
-              info@vitaltrusthealth.com
+              vitaltrusth@gmail.com
             </p>
           </div>
         </a>

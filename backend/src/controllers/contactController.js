@@ -1,28 +1,14 @@
  import Contact from "../models/Contact.js";
+import { sendAdminEmail, sendUserEmail } from "../services/emailService.js";
 
 export const submitContact = async (req, res, next) => {
   try {
-    let { name, email, phone, message } = req.body;
+    const { name, email, phone, message } = req.body;
 
-    // ✅ Trim inputs
-    name = name?.trim();
-    email = email?.trim();
-    message = message?.trim();
-
-    // ✅ Validation
-    if (!name || !email || !message) {
+    if (![name, email, message].every(Boolean)) {
       return res.status(400).json({
         success: false,
-        message: "Name, email and message are required",
-      });
-    }
-
-    // ✅ Email format check (basic)
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid email format",
+        message: "Name, email and message are required"
       });
     }
 
@@ -31,19 +17,30 @@ export const submitContact = async (req, res, next) => {
       name,
       email,
       phone,
-      message,
+      message
     });
 
-    // ✅ Response (safe)
+    // 🔥 EMAILS (CONTROL HERE)
+
+    // 👉 Always send to admin
+    sendAdminEmail({ name, email, phone, message });
+
+    // 👉 Toggle user email (ON/OFF)
+    const SEND_USER_EMAIL = true;
+
+    if (SEND_USER_EMAIL) {
+      sendUserEmail({ name, email });
+    }
+
+    // ✅ Response fast
     return res.status(201).json({
       success: true,
       message: "Your message has been sent successfully",
       data: {
         id: contact._id,
         name: contact.name,
-        email: contact.email,
-        createdAt: contact.createdAt,
-      },
+        email: contact.email
+      }
     });
 
   } catch (error) {
