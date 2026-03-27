@@ -49,7 +49,7 @@ const Hero = () => {
       </div>
 
       {/* ✅ IMAGE → hidden only on mobile */}
-      <div className="hidden lg:flex absolute right-0 bottom-0 h-full items-end pointer-events-none">
+      <div className="hidden lg:flex absolute right-0 mr-10 bottom-0 h-full items-end pointer-events-none">
         <img
           src="/images/doctor.png"
           alt="Doctor"
