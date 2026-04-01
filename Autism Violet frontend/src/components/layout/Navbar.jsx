@@ -1,91 +1,105 @@
  import { useState } from "react";
-import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { Link, useLocation } from "react-router-dom";
+import logo from "../../assets/logo/logo.png";
 
 const Navbar = () => {
-  const [open, setOpen] = useState(false);
   const [mobile, setMobile] = useState(false);
+  const location = useLocation();
+
+  const navLinks = [
+    { name: "Home", path: "/" },
+    { name: "About", path: "/about" },
+    { name: "Services", path: "/services" },
+    { name: "FAQ", path: "/faq" },
+  ];
 
   return (
-    <header className="w-full bg-white border-b sticky top-0 z-50">
-      <div className="container-custom flex justify-between items-center py-4">
+    <header className="w-full sticky top-0 z-50 bg-white border-b border-gray-200 shadow-[0_4px_20px_rgba(106,63,160,0.08)]">
 
-        {/* Logo */}
-        <Link to="/" className="text-primary font-bold text-xl">
-          Autism Violet
+      {/* ✅ FIXED HEIGHT */}
+      <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-between h-[72px]">
+
+        {/* 🔷 Logo */}
+        <Link to="/" className="flex items-center gap-3 group">
+          <img
+            src={logo}
+            alt="Autism Violet"
+            className="h-15 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+          />
+          <span className="text-xl font-semibold text-[#4B2C73]">
+            Autism Violet
+          </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
+        {/* 🧭 Desktop Nav */}
+        <nav className="hidden md:flex items-center gap-10 text-sm font-medium">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              className={`relative transition ${
+                location.pathname === link.path
+                  ? "text-[#6A3FA0]"
+                  : "text-gray-700 hover:text-[#6A3FA0]"
+              }`}
+            >
+              {link.name}
 
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-
-          {/* Dropdown */}
-          <div
-            className="relative"
-            onMouseEnter={() => setOpen(true)}
-            onMouseLeave={() => setOpen(false)}
-          >
-            <span className="cursor-pointer">Services</span>
-
-            <AnimatePresence>
-              {open && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 10 }}
-                  className="absolute top-8 left-0 bg-white shadow-xl rounded-xl p-4 w-64"
-                >
-                  <div className="flex flex-col gap-3 text-sm">
-                    <Link to="/services">All Services</Link>
-                    <Link to="/services#early">Early Intervention</Link>
-                    <Link to="/services#school">School Readiness</Link>
-                    <Link to="/services#home">In-Home Therapy</Link>
-                  </div>
-                </motion.div>
+              {location.pathname === link.path && (
+                <span className="absolute left-0 -bottom-1 w-full h-[2px] bg-[#6A3FA0]" />
               )}
-            </AnimatePresence>
-          </div>
-
-          <Link to="/contact">Contact</Link>
+            </Link>
+          ))}
         </nav>
 
-        {/* CTA */}
-        <Link
-          to="/contact"
-          className="hidden md:block bg-primary text-white px-5 py-2 rounded-full text-sm"
-        >
-          Get Started
-        </Link>
+        {/* 🚀 CTA */}
+        <div className="hidden md:flex items-center">
+          <Link
+            to="/contact"
+            className="px-6 py-2 rounded-full text-sm font-medium text-white transition-all duration-300 hover:scale-105"
+            style={{
+              background: "linear-gradient(90deg, #6A3FA0, #B58ED6)",
+            }}
+          >
+            Start Your Child’s Journey
+          </Link>
+        </div>
 
-        {/* Mobile Button */}
+        {/* 📱 Mobile Toggle */}
         <button
           onClick={() => setMobile(!mobile)}
-          className="md:hidden text-xl"
+          className="md:hidden text-2xl text-[#4B2C73]"
         >
-          ☰
+          {mobile ? "✕" : "☰"}
         </button>
-
       </div>
 
-      {/* Mobile Menu */}
-      <AnimatePresence>
-        {mobile && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden px-6 pb-4 flex flex-col gap-4"
-          >
-            <Link to="/" onClick={() => setMobile(false)}>Home</Link>
-            <Link to="/about" onClick={() => setMobile(false)}>About</Link>
-            <Link to="/services" onClick={() => setMobile(false)}>Services</Link>
-            <Link to="/contact" onClick={() => setMobile(false)}>Contact</Link>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* 📱 Mobile Menu */}
+      {mobile && (
+        <div className="md:hidden px-6 pb-6 flex flex-col gap-4 bg-white">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              to={link.path}
+              onClick={() => setMobile(false)}
+              className="text-[#4B2C73] text-lg font-medium"
+            >
+              {link.name}
+            </Link>
+          ))}
 
+          <Link
+            to="/contact"
+            onClick={() => setMobile(false)}
+            className="mt-2 text-center text-white py-2 rounded-full"
+            style={{
+              background: "linear-gradient(90deg, #6A3FA0, #B58ED6)",
+            }}
+          >
+            Start Your Child’s Journey
+          </Link>
+        </div>
+      )}
     </header>
   );
 };
