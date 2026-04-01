@@ -108,7 +108,7 @@ const About = () => {
             {/* Main image card */}
             <div className="w-full h-[340px] bg-[#f3f0fb] rounded-[20px] overflow-hidden">
               <img
-                src="/images/about/team.png"
+                src="/images/about/team.avif"
                 alt="Autism Violet therapy team"
                 className="w-full h-full object-cover"
               />

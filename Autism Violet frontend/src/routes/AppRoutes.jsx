@@ -10,7 +10,6 @@ import FAQ from "../pages/FAQ";
 import Kenya from "../pages/Kenya";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 
-// ✅ NEW IMPORTS
 import EarlyIntervention from "../pages/EarlyIntervention";
 import Therapies from "../pages/Therapies";
 import Assessments from "../pages/Assessments";
@@ -18,9 +17,13 @@ import Programs from "../pages/Programs";
 import ParentSupport from "../pages/ParentSupport";
 import Resources from "../pages/Resources";
 
+// ✅ NEW
+import ScrollToTop from "../components/ScrollToTop";
+import RouteScrollTop from "../components/RouteScrollTop";
+
 import useScrollToHash from "../hooks/useScrollToHash";
 
-// Page animation wrapper
+// Page animation
 const PageWrapper = ({ children }) => (
   <motion.div
     initial={{ opacity: 0 }}
@@ -31,7 +34,7 @@ const PageWrapper = ({ children }) => (
   </motion.div>
 );
 
-// ✅ Scroll handler
+// Hash scroll handler
 const ScrollHandler = () => {
   useScrollToHash();
   return null;
@@ -41,7 +44,10 @@ const AppRoutes = () => {
   return (
     <Router>
 
-      <ScrollHandler />
+      {/* ✅ Scroll Systems */}
+      <ScrollToTop />       {/* always scroll to top */}
+      <RouteScrollTop />    {/* route change scroll */}
+      <ScrollHandler />     {/* hash scroll */}
 
       <Layout>
         <Routes>
@@ -55,7 +61,7 @@ const AppRoutes = () => {
           <Route path="/kenya" element={<PageWrapper><Kenya /></PageWrapper>} />
           <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
 
-          {/* 💜 SubNavbar Pages */}
+          {/* Sub Pages */}
           <Route path="/early-intervention" element={<PageWrapper><EarlyIntervention /></PageWrapper>} />
           <Route path="/therapies" element={<PageWrapper><Therapies /></PageWrapper>} />
           <Route path="/assessments" element={<PageWrapper><Assessments /></PageWrapper>} />

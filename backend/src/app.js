@@ -3,6 +3,7 @@ import cors from "cors";
 import contactRoutes from "./routes/contactRoutes.js";
 import { errorHandler } from "./middleware/errorMiddleware.js";
 
+
 const app = express();
 
 // ✅ CORS (updated for Autism Violet)

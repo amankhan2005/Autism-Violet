@@ -18,7 +18,7 @@ const Hero = () => {
           {/* LEFT CONTENT */}
           <div className="text-center md:text-left z-10">
 
-          
+
 
             <motion.h1
               variants={fadeUp}
@@ -83,21 +83,21 @@ const Hero = () => {
             </motion.div>
           </div>
 
-        
+
+           
           {/* RIGHT VISUAL */}
-{/* RIGHT VISUAL */}
-<div className="relative w-full h-full min-h-[500px]">
+          <div className="relative w-full h-full min-h-[420px]">
 
-  <motion.img
-    src="/images/hero/child.png"
-    alt="Child receiving ABA therapy"
-    initial={{ opacity: 0, scale: 1.05 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.7 }}
-    className="absolute right-0 top-0 w-full h-full object-cover rounded-2xl"
-  />
+            <motion.img
+              src="/images/hero/child.png"
+              alt="Child receiving ABA therapy"
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7 }}
+              className="absolute right-0 top-0 w-full h-full object-cover rounded-2xl"
+            />
 
-</div>
+          </div>
         </div>
       </Container>
 
