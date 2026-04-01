@@ -2,13 +2,15 @@
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
+// ✅ Updated branding
 const FROM_EMAIL =
-  process.env.EMAIL_FROM || "Vital Trust Health <onboarding@resend.dev>";
+  process.env.EMAIL_FROM || "Autism Violet <onboarding@resend.dev>";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-const COMPANY_NAME = process.env.COMPANY_NAME || "Vital Trust Health LLC";
+const COMPANY_NAME = process.env.COMPANY_NAME || "Autism Violet";
 
-const gradient = "linear-gradient(135deg,#F97316,#FACC15,#3EB8A7)";
+// 🎨 Purple gradient (logo based)
+const gradient = "linear-gradient(135deg,#6B3FA0,#B88AD9,#4B2A7A)";
 
 // 🔥 ADMIN EMAIL
 export const sendAdminEmail = async ({ name, email, phone, message }) => {
@@ -21,7 +23,7 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
       subject: `New Client Inquiry - ${COMPANY_NAME}`,
 
       html: `
-<div style="font-family:Arial,sans-serif;background:#f4f6f8;padding:30px;">
+<div style="font-family:Arial,sans-serif;background:#F5F3F8;padding:30px;">
 
   <div style="max-width:620px;margin:auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.08);">
 
@@ -51,9 +53,9 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
           .map(
             ([label, value], i) => `
           <div style="display:flex;padding:12px;background:${
-            i % 2 === 0 ? "#fff" : "#fafafa"
+            i % 2 === 0 ? "#fff" : "#F9F7FC"
           };">
-            <div style="width:120px;font-weight:600;color:#333;">
+            <div style="width:120px;font-weight:600;color:#4B2A7A;">
               ${label}
             </div>
             <div style="flex:1;color:#555;">
@@ -69,7 +71,7 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
     </div>
 
     <!-- FOOTER -->
-    <div style="padding:15px;text-align:center;font-size:12px;color:#777;background:#f8fafc;">
+    <div style="padding:15px;text-align:center;font-size:12px;color:#777;background:#F5F3F8;">
       © ${new Date().getFullYear()} ${COMPANY_NAME}
     </div>
 
@@ -93,7 +95,7 @@ export const sendUserEmail = async ({ name, email }) => {
       subject: `We’ve Received Your Request - ${COMPANY_NAME}`,
 
       html: `
-<div style="font-family:Arial,sans-serif;background:#f4f6f8;padding:30px;">
+<div style="font-family:Arial,sans-serif;background:#F5F3F8;padding:30px;">
 
   <div style="max-width:620px;margin:auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.08);">
 
@@ -101,14 +103,14 @@ export const sendUserEmail = async ({ name, email }) => {
     <div style="background:${gradient};padding:30px;text-align:center;color:#fff;">
       <h2 style="margin:0;font-size:24px;">${COMPANY_NAME}</h2>
       <p style="margin:6px 0 0;font-size:14px;opacity:0.9;">
-        Compassion • Care • Trust
+        Compassion • Growth • Care
       </p>
     </div>
 
     <!-- BODY -->
     <div style="padding:28px;">
 
-      <h3 style="margin-top:0;color:#222;">Hello ${name}, 👋</h3>
+      <h3 style="margin-top:0;color:#4B2A7A;">Hello ${name}, 👋</h3>
 
       <p style="color:#555;line-height:1.6;">
         Thank you for reaching out to <strong>${COMPANY_NAME}</strong>.
@@ -122,7 +124,7 @@ export const sendUserEmail = async ({ name, email }) => {
       <!-- CTA -->
       <div style="margin:30px 0;text-align:center;">
         <a href="mailto:${ADMIN_EMAIL}"
-           style="background:#F97316;color:#fff;padding:14px 22px;border-radius:999px;text-decoration:none;font-weight:bold;box-shadow:0 8px 20px rgba(249,115,22,0.3);">
+           style="background:#6B3FA0;color:#fff;padding:14px 22px;border-radius:999px;text-decoration:none;font-weight:bold;box-shadow:0 8px 20px rgba(107,63,160,0.3);">
           Contact Support →
         </a>
       </div>
@@ -134,9 +136,9 @@ export const sendUserEmail = async ({ name, email }) => {
     </div>
 
     <!-- FOOTER -->
-    <div style="padding:18px;text-align:center;font-size:12px;color:#777;background:#f8fafc;">
+    <div style="padding:18px;text-align:center;font-size:12px;color:#777;background:#F5F3F8;">
       © ${new Date().getFullYear()} ${COMPANY_NAME}<br/>
-      You’re in safe hands 💚
+      Supporting every child’s journey 💜
     </div>
 
   </div>
