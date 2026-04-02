@@ -1,11 +1,12 @@
 import { motion } from "framer-motion";
 import Container from "../components/common/Container";
 import { fadeUp, staggerContainer } from "../utils/animations";
+import { Link } from "react-router-dom";
 
 const stats = [
   { value: "500+", label: "Children Supported" },
-  { value: "98%",  label: "Family Satisfaction" },
-  { value: "12+",  label: "Years Experience" },
+  { value: "98%", label: "Family Satisfaction" },
+  { value: "12+", label: "Years Experience" },
 ];
 
 const values = [
@@ -278,7 +279,7 @@ const About = () => {
                       style={{ background: i % 2 === 0 ? "#FFF3E8" : "#EDE7F6" }}
                     >
                       <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-                        <path d="M2 6l3 3 5-5" stroke={i % 2 === 0 ? "#F97316" : "#7C3AED"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M2 6l3 3 5-5" stroke={i % 2 === 0 ? "#F97316" : "#7C3AED"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
                     <span className="text-[14px] font-medium text-[#1a0a3b]">{service}</span>
@@ -386,12 +387,21 @@ const About = () => {
               Let's work together to build confidence, independence, and a brighter future.
             </p>
 
-            <button className="inline-flex items-center justify-center gap-2 bg-white text-[#7C3AED] hover:bg-orange-50 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-px">
+            <Link
+              to="/contact-us"
+              className="inline-flex items-center justify-center gap-2 bg-white text-[#7C3AED] hover:bg-orange-50 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-px"
+            >
               Book a Free Consultation
-              <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M3 8h10M9 4l4 4-4 4"/>
+              <svg
+                className="w-3.5 h-3.5"
+                viewBox="0 0 16 16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path d="M3 8h10M9 4l4 4-4 4" />
               </svg>
-            </button>
+            </Link>
           </motion.div>
         </Container>
       </section>

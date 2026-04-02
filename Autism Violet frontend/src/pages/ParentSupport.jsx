@@ -1,108 +1,216 @@
 import { motion } from "framer-motion";
+import Container from "../components/common/Container";
+import { fadeUp, staggerContainer } from "../utils/animations";
 import parentImg from "../assets/images/parent-support.jpg";
 
 const sections = [
   {
+    number: "01",
     title: "Guidance for Parents & Caregivers",
-    desc: "At Autism Violet, we provide expert guidance to help parents better understand autism and their child’s unique needs. Our team works closely with families to offer practical strategies that support communication, behavior, and emotional development at home.",
+    desc: "At Autism Violet, we provide expert guidance to help parents better understand autism and their child's unique needs. Our team works closely with families to offer practical strategies that support communication, behavior, and emotional development at home.",
+    accent: "#F97316",
   },
   {
+    number: "02",
     title: "Parent Training Programs",
     desc: "We offer structured parent training sessions that empower caregivers with effective techniques used in ABA therapy. These programs help parents confidently manage daily challenges, reinforce learning, and support consistent progress beyond therapy sessions.",
+    accent: "#7C3AED",
   },
   {
+    number: "03",
     title: "Emotional & Counseling Support",
     desc: "Caring for a child with autism can be overwhelming, and we are here to support you. Autism Violet provides emotional guidance and counseling to help families stay confident, informed, and supported throughout their journey.",
+    accent: "#F97316",
   },
   {
+    number: "04",
     title: "Building Strong Family Involvement",
-    desc: "We believe that family involvement is key to a child’s success. Our collaborative approach ensures that parents, therapists, and caregivers work together to create a consistent and supportive environment for long-term growth.",
+    desc: "We believe that family involvement is key to a child's success. Our collaborative approach ensures that parents, therapists, and caregivers work together to create a consistent and supportive environment for long-term growth.",
+    accent: "#7C3AED",
   },
 ];
 
 const ParentSupport = () => {
   return (
-    <section className="bg-white">
+    <div className="bg-[#faf9ff]">
 
-      {/* CLEAN HEADER */}
-      <div className="text-center py-16 px-6">
-        <h1 className="text-4xl font-bold text-[#4B2C73] mb-4">
-          Family Support & Parent Guidance
-        </h1>
-        <p className="text-gray-600 max-w-[700px] mx-auto">
-          Autism Violet empowers families with knowledge, training, and support to help children grow with confidence, independence, and long-term success.
-        </p>
-      </div>
+      {/* ── HERO ──────────────────────────────────────────────── */}
+      <section className="py-24 text-center">
+        <Container>
+          <motion.p
+            variants={fadeUp} initial="hidden" animate="show"
+            className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#7C3AED] mb-5"
+          >
+            Family Support
+          </motion.p>
 
-      <div className="max-w-[1100px] mx-auto px-6 pb-20">
+          <motion.h1
+            variants={fadeUp} initial="hidden" animate="show"
+            transition={{ delay: 0.08 }}
+            className="font-playfair text-4xl md:text-7xl font-bold text-[#1a0a3b] leading-[1.15] mb-6"
+          >
+            Family Support &amp;{" "}
+            <em className="italic text-orange-500">Parent Guidance</em>
+          </motion.h1>
 
-        {/* IMAGE + TEXT */}
-        <div className="grid md:grid-cols-2 gap-12 items-center mb-20">
+          <motion.p
+            variants={fadeUp} initial="hidden" animate="show"
+            transition={{ delay: 0.16 }}
+            className="text-[#5a4e72] text-[15px] leading-relaxed max-w-[560px] mx-auto"
+          >
+            Autism Violet empowers families with knowledge, training, and support
+            to help children grow with confidence, independence, and long-term success.
+          </motion.p>
+        </Container>
+      </section>
 
-          {/* IMAGE */}
-          <div
-            className="w-full h-[340px] rounded-2xl bg-cover bg-center shadow-md"
-            style={{
-              backgroundImage: `url(${parentImg})`,
-            }}
-          />
+      {/* ── IMAGE + TEXT ──────────────────────────────────────── */}
+      <section className="py-16">
+        <Container>
+          <div className="grid md:grid-cols-2 gap-14 items-center">
 
-          {/* TEXT */}
-          <div>
-            <h2 className="text-2xl font-semibold text-[#4B2C73] mb-4">
-              Supporting Families Beyond Therapy
-            </h2>
-            <p className="text-gray-600 leading-relaxed">
-              At Autism Violet, we believe real progress happens when families are actively involved. Our programs are designed to guide parents, strengthen daily routines, and ensure children receive consistent support both at home and during therapy sessions.
-            </p>
-          </div>
-
-        </div>
-
-        {/* CARDS */}
-        <div className="grid md:grid-cols-2 gap-8 mb-20">
-          {sections.map((item, i) => (
             <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.2 }}
-              className="bg-white p-7 rounded-2xl shadow-sm hover:shadow-md transition"
+              initial={{ opacity: 0, x: -32 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+              className="relative"
             >
-              <div className="w-12 h-12 flex items-center justify-center rounded-full bg-[#EEE7FF] text-[#6D28D9] font-bold mb-4">
-                {i + 1}
+              <img
+                src={parentImg}
+                alt="Parent support and family guidance session"
+                className="rounded-2xl w-full h-80 object-cover"
+              />
+              <div className="absolute -bottom-4 -right-4 w-20 h-20 rounded-full border-2 border-[#DDD6FE] -z-10" />
+              <div
+                className="absolute top-5 left-5 bg-white rounded-2xl px-4 py-3 flex items-center gap-3"
+                style={{ boxShadow: "0 4px 24px rgba(26,10,59,0.12)" }}
+              >
+                <div className="w-9 h-9 rounded-full bg-[#EDE7F6] flex items-center justify-center text-base flex-shrink-0">
+                  💜
+                </div>
+                <div>
+                  <p className="text-[13px] font-semibold text-[#1a0a3b] m-0">Science-backed care</p>
+                  <p className="text-[11px] text-[#7b6fa0] m-0">Every session, every child</p>
+                </div>
               </div>
+            </motion.div>
 
-              <h3 className="text-lg font-semibold text-[#4B2C73] mb-3">
-                {item.title}
-              </h3>
-
-              <p className="text-gray-600 leading-relaxed">
-                {item.desc}
+            <motion.div
+              initial={{ opacity: 0, x: 32 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55 }}
+            >
+              <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#7C3AED] mb-4">
+                Our Approach
+              </p>
+              <h2 className="font-playfair text-3xl md:text-4xl font-bold text-[#1a0a3b] leading-[1.15] mb-5">
+                Supporting Families{" "}
+                <em className="italic text-orange-500">Beyond Therapy</em>
+              </h2>
+              <p className="text-[#5a4e72] text-[15px] leading-relaxed">
+                At Autism Violet, we believe real progress happens when families are actively involved. Our programs are designed to guide parents, strengthen daily routines, and ensure children receive consistent support both at home and during therapy sessions.
               </p>
             </motion.div>
-          ))}
-        </div>
 
-        {/* CTA */}
-        <div className="text-center bg-[#4B2C73] text-white rounded-2xl p-12">
-          <h2 className="text-2xl font-semibold mb-3">
-            Get Support for Your Family Today
-          </h2>
-          <p className="text-sm mb-6 opacity-90 max-w-[500px] mx-auto">
-            Connect with Autism Violet and discover how our family support programs can help you guide your child toward a brighter and more independent future.
-          </p>
+          </div>
+        </Container>
+      </section>
 
-          <a
-            href="/contact"
-            className="inline-block bg-white text-[#4B2C73] font-semibold px-6 py-3 rounded-full hover:scale-105 transition"
+      {/* ── CARDS ─────────────────────────────────────────────── */}
+      <section className="py-20 md:py-28">
+        <Container>
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid md:grid-cols-2 gap-5"
           >
-            Talk to a Specialist
-          </a>
-        </div>
+            {sections.map((item, i) => (
+              <motion.div
+                key={i}
+                variants={fadeUp}
+                whileHover={{ y: -5 }}
+                transition={{ type: "spring", stiffness: 300, damping: 22 }}
+                className="group relative bg-white rounded-2xl p-7 border border-[#EDE7F6] hover:border-[#DDD6FE] hover:shadow-[0_8px_32px_-8px_rgba(124,58,237,0.12)] transition-all duration-300 overflow-hidden"
+              >
+                <div
+                  className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl transition-all duration-300 group-hover:h-[4px]"
+                  style={{ backgroundColor: item.accent }}
+                />
+                <span
+                  className="font-playfair text-[56px] font-bold leading-none mb-6 block"
+                  style={{ color: item.accent, opacity: 0.12 }}
+                >
+                  {item.number}
+                </span>
+                <div className="pl-4 border-l-2" style={{ borderColor: item.accent }}>
+                  <h3 className="font-semibold text-[#1a0a3b] text-[16px] leading-snug mb-3">
+                    {item.title}
+                  </h3>
+                  <p className="text-[#7b6fa0] text-[13.5px] leading-relaxed">
+                    {item.desc}
+                  </p>
+                </div>
+                <div
+                  className="absolute bottom-5 right-5 w-2 h-2 rounded-full opacity-30 group-hover:opacity-60 transition-opacity duration-300"
+                  style={{ backgroundColor: item.accent }}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </Container>
+      </section>
 
-      </div>
-    </section>
+      {/* ── CTA ───────────────────────────────────────────────── */}
+      <section className="relative bg-[#643C85] py-20 md:py-28 overflow-hidden">
+        {[500, 740, 980].map((size, i) => (
+          <div
+            key={i}
+            className="hidden md:block absolute rounded-full border border-white/[0.08] pointer-events-none -translate-x-1/2 left-1/2"
+            style={{ width: size, height: size, top: -(size * 0.36) }}
+          />
+        ))}
+
+        <Container>
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+            className="relative z-10 max-w-[600px] mx-auto text-center px-2"
+          >
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-[11px] font-semibold tracking-[0.1em] uppercase px-4 py-1.5 rounded-full mb-6">
+              <span className="w-1.5 h-1.5 rounded-full bg-white/60" />
+              Free initial consultation
+            </div>
+
+            <h2 className="font-playfair text-[clamp(26px,6vw,42px)] font-bold text-white leading-[1.2] tracking-tight mb-4">
+              Get Support for Your{" "}
+              <em className="italic text-orange-300">Family Today</em>
+            </h2>
+
+            <p className="text-white/65 text-[14px] md:text-[15px] leading-relaxed max-w-[440px] mx-auto mb-8">
+              Connect with Autism Violet and discover how our family support programs
+              can help you guide your child toward a brighter and more independent future.
+            </p>
+
+            <a
+              href="/contact-us"
+              className="inline-flex items-center justify-center gap-2 bg-white text-[#7C3AED] hover:bg-orange-50 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-px"
+            >
+              Talk to a Specialist
+              <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </a>
+          </motion.div>
+        </Container>
+      </section>
+
+    </div>
   );
 };
 

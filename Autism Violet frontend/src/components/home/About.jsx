@@ -89,7 +89,7 @@ const About = () => {
             </div>
 
             {/* CTA */}
-            <a href="#" className="inline-flex items-center gap-2 mt-9 text-[13px] font-semibold text-[#7C3AED] border-b border-[#DDD6FE] pb-0.5 hover:border-[#7C3AED] transition-colors">
+            <a href="/about-us" className="inline-flex items-center gap-2 mt-9 text-[13px] font-semibold text-[#7C3AED] border-b border-[#DDD6FE] pb-0.5 hover:border-[#7C3AED] transition-colors">
               Learn about our approach
               <svg className="w-3.5 h-3.5" viewBox="0 0 14 14" fill="none">
                 <path d="M3 7h8M7 3l4 4-4 4" stroke="#7C3AED" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>

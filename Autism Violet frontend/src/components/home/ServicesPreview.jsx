@@ -134,7 +134,7 @@ const ServicesPreview = () => {
               </svg>
             </Link>
             <Link
-              to="/contact"
+              to="/contact-us"
               className="bg-[#1a0a3b] hover:bg-[#7C3AED] text-white text-[13px] font-semibold px-6 py-3 rounded-full transition-colors duration-200"
             >
               Book a Consultation

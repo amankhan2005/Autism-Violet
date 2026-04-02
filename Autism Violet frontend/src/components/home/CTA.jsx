@@ -72,7 +72,7 @@ const CTA = () => {
           {/* CTAs — stack on mobile, row on md+ */}
           <div className="flex flex-col sm:flex-row justify-center gap-3 mb-10 px-4 sm:px-0">
             <Link
-              to="/contact?type=assessment"
+              to="/contact-us?type=assessment"
               className="inline-flex items-center justify-center gap-2 bg-white text-[#7C3AED] hover:bg-orange-50 px-7 py-3.5 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-px w-full sm:w-auto"
             >
               Book a free assessment
@@ -81,16 +81,7 @@ const CTA = () => {
               </svg>
             </Link>
 
-            <Link
-              to="/contact?type=call"
-              className="inline-flex items-center justify-center gap-2 border border-white/30 hover:border-white/60 text-white/80 hover:text-white px-7 py-3.5 rounded-full text-sm transition-all duration-200 hover:-translate-y-px w-full sm:w-auto"
-            >
-              <svg className="w-3.5 h-3.5 opacity-60 flex-shrink-0" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth={1.5}>
-                <rect x="2" y="3" width="12" height="11" rx="1.5" />
-                <path d="M5 1v4M11 1v4M2 7h12" />
-              </svg>
-              Schedule a call
-            </Link>
+
           </div>
 
           {/* Trust signals — stack vertically on mobile, row on md+ */}

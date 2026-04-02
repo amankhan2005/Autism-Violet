@@ -4,10 +4,11 @@ import logo from "../../assets/logo/logo.png";
 
 const navLinks = [
   { label: "Home", to: "/" },
-  { label: "About us", to: "/about" },
+  { label: "About us", to: "/about-us" },
   { label: "Services", to: "/services" },
-  { label: "Kenya program", to: "/kenya" },
-  { label: "Contact", to: "/contact" },
+  { label: "FAQ", to: "/faq" },
+  { label: "Contact", to: "/contact-us" },
+    { label: "Kenya program", to: "/kenya" },
   { label: "Privacy policy", to: "/privacy-policy" },
 ];
 

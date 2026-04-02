@@ -8,7 +8,7 @@ const Navbar = () => {
 
   const navLinks = [
     { name: "Home", path: "/" },
-    { name: "About", path: "/about" },
+    { name: "About Us", path: "/about-us" },
     { name: "Services", path: "/services" },
     { name: "FAQ", path: "/faq" },
   ];
@@ -55,7 +55,7 @@ const Navbar = () => {
         {/* 🚀 CTA */}
         <div className="hidden md:flex items-center">
           <Link
-            to="/contact"
+            to="/contact-us"
             className="px-6 py-2 rounded-full text-sm font-medium text-white transition-all duration-300 hover:scale-105"
             style={{
               background: "linear-gradient(90deg, #6A3FA0, #B58ED6)",
@@ -89,7 +89,7 @@ const Navbar = () => {
           ))}
 
           <Link
-            to="/contact"
+            to="/contact-us"
             onClick={() => setMobile(false)}
             className="mt-2 text-center text-white py-2 rounded-full"
             style={{

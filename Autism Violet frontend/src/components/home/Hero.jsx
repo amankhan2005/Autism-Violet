@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Button from "../common/Button";
 import Container from "../common/Container";
 import { fadeUp } from "../../utils/animations";
+import { Link } from "react-router-dom";
 
 const stats = [
   { value: "500+", label: "Children Supported" },
@@ -43,6 +44,7 @@ const Hero = () => {
             </motion.p>
 
             {/* CTAs */}
+
             <motion.div
               variants={fadeUp}
               initial="hidden"
@@ -50,15 +52,28 @@ const Hero = () => {
               transition={{ delay: 0.3 }}
               className="flex gap-3 mt-8 flex-wrap justify-center md:justify-start"
             >
-              <button className="bg-orange-500 hover:bg-[#6D28D9] text-white px-7 py-3.5 rounded-full text-sm font-semibold transition-colors duration-200">
-                Know More
-              </button>
-              <button className="flex items-center gap-2 px-6 py-3.5 rounded-full border-[1.5px] border-[#7C3AED] text-[#7C3AED] hover:bg-[#EDE7F6] text-sm font-medium transition-colors duration-200">
-                Book a Consultation
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
+              {/* ABOUT US */}
+              <Link to="/about-us">
+                <button className="bg-orange-500 hover:bg-[#6D28D9] text-white px-7 py-3.5 rounded-full text-sm font-semibold transition-colors duration-200">
+                  Know More
+                </button>
+              </Link>
+
+              {/* CONTACT US */}
+              <Link to="/contact-us">
+                <button className="flex items-center gap-2 px-6 py-3.5 rounded-full border-[1.5px] border-[#7C3AED] text-[#7C3AED] hover:bg-[#EDE7F6] text-sm font-medium transition-colors duration-200">
+                  Book a Consultation
+                  <svg
+                    className="w-4 h-4"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </Link>
             </motion.div>
 
             {/* Stats strip */}
@@ -84,7 +99,7 @@ const Hero = () => {
           </div>
 
 
-           
+
           {/* RIGHT VISUAL */}
           <div className="relative w-full h-full min-h-[420px]">
 

@@ -54,10 +54,10 @@ const AppRoutes = () => {
 
           {/* Core Pages */}
           <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
-          <Route path="/about" element={<PageWrapper><About /></PageWrapper>} />
+          <Route path="/about-us" element={<PageWrapper><About /></PageWrapper>} />
           <Route path="/services" element={<PageWrapper><Services /></PageWrapper>} />
           <Route path="/faq" element={<PageWrapper><FAQ /></PageWrapper>} />
-          <Route path="/contact" element={<PageWrapper><Contact /></PageWrapper>} />
+          <Route path="/contact-us" element={<PageWrapper><Contact /></PageWrapper>} />
           <Route path="/kenya" element={<PageWrapper><Kenya /></PageWrapper>} />
           <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
 
