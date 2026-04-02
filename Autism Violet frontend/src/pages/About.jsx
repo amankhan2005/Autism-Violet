@@ -3,6 +3,7 @@ import Container from "../components/common/Container";
 import { fadeUp, staggerContainer } from "../utils/animations";
 import { Link } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import InsuranceSection from "../components/home/Insurance";
 
 const stats = [
   { value: "500+", label: "Children Supported" },
@@ -409,6 +410,8 @@ const About = () => {
           </motion.div>
         </Container>
       </section>
+  
+     <InsuranceSection/>
 
       {/* ── CTA ───────────────────────────────────────────────── */}
       <section style={{
