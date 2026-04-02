@@ -9,6 +9,7 @@ import About from "../pages/About";
 import FAQ from "../pages/FAQ";
 import Kenya from "../pages/Kenya";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
+import Career from "../pages/Career";
 
 import EarlyIntervention from "../pages/EarlyIntervention";
 import Therapies from "../pages/Therapies";
@@ -60,6 +61,7 @@ const AppRoutes = () => {
           <Route path="/contact-us" element={<PageWrapper><Contact /></PageWrapper>} />
           <Route path="/kenya" element={<PageWrapper><Kenya /></PageWrapper>} />
           <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
+          <Route path="/career" element={<PageWrapper><Career /></PageWrapper>} />
 
           {/* Sub Pages */}
           <Route path="/early-intervention" element={<PageWrapper><EarlyIntervention /></PageWrapper>} />

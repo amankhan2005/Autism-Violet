@@ -113,7 +113,7 @@ const Contact = () => {
             className="font-playfair text-4xl md:text-7xl font-bold text-[#1a0a3b] leading-[1.15] mb-4"
           >
             Contact{" "}
-            <em className="italic text-orange-500">Autism Violet</em>
+            <em className="italic text-[#6A3FA0]">Autism Violet</em>
           </motion.h1>
 
           <motion.p
@@ -319,3 +319,20 @@ const Contact = () => {
 };
 
 export default Contact;
+
+{/*Add a simple math CAPTCHA:
+Random numbers (0–9)
+Example: “3 + 5 = ?”
+Generate new captcha on page load and after submit
+User must enter correct answer to enable submit button
+Button behavior:
+Disabled until:
+Required fields filled
+CAPTCHA correct
+Show loading state (“Sending…”)
+Show error message if API fails
+Show success modal after submit
+UX improvements:
+Inline validation messages
+Smooth transitions (Tailwind or Framer Motion)
+Disabled button styling */}

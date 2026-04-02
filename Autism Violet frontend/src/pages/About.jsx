@@ -57,7 +57,7 @@ const About = () => {
             className="font-playfair text-4xl md:text-7xl font-bold text-[#1a0a3b] leading-[1.15] mb-6"
           >
             About{" "}
-            <em className="italic text-orange-500">Autism Violet</em>
+            <em className="italic text-[#6A3FA0]">Autism Violet</em>
           </motion.h1>
 
           <motion.p
@@ -129,7 +129,7 @@ const About = () => {
               </p>
               <h2 className="font-playfair text-4xl md:text-5xl font-bold text-[#1a0a3b] leading-[1.15] mb-5">
                 About{" "}
-                <em className="italic text-orange-500">Autism Violet</em>
+                <em className="italic text-[#6A3FA0]">Autism Violet</em>
               </h2>
               <p className="text-[#5a4e72] text-[15px] leading-relaxed">
                 At Autism Violet, we believe every child has the ability to grow and

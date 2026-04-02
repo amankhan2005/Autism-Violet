@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import Container from "../common/Container";
 import { fadeUp, staggerContainer } from "../../utils/animations";
+import { useTheme } from "../../context/ThemeContext"; // ✅ ADD
 
 const data = [
   {
@@ -30,8 +31,13 @@ const data = [
 ];
 
 const WhyChooseUs = () => {
+  const { dark } = useTheme(); // ✅ USE GLOBAL THEME
+
   return (
-    <section className="py-20 md:py-28 bg-[#faf9ff]">
+    <section
+      className="py-20 md:py-28 transition-colors duration-300"
+      style={{ background: dark ? "#0a0a0a" : "#faf9ff" }}
+    >
       <Container>
 
         {/* Header */}
@@ -42,15 +48,29 @@ const WhyChooseUs = () => {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#7C3AED] mb-4">
+          <p
+            className="text-[11px] font-semibold tracking-[0.2em] uppercase mb-4"
+            style={{ color: dark ? "#9b6dff" : "#7C3AED" }}
+          >
             Why Families Choose Us
           </p>
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold text-[#1a0a3b] leading-[1.15] max-w-[480px]">
+            <h2
+              className="font-playfair text-4xl md:text-5xl font-bold leading-[1.15] max-w-[480px]"
+              style={{ color: dark ? "#fff" : "#1a0a3b" }}
+            >
               Why Families Trust{" "}
-              <em className="italic text-orange-500">Autism Violet</em>
+              <em
+                className="italic"
+                style={{ color: dark ? "#9b6dff" : "#6A3FA0" }}
+              >
+                Autism Violet
+              </em>
             </h2>
-            <p className="text-[#5a4e72] text-[15px] leading-relaxed max-w-[340px] md:text-right">
+            <p
+              className="text-[15px] leading-relaxed max-w-[340px] md:text-right"
+              style={{ color: dark ? "#ccc" : "#5a4e72" }}
+            >
               Personalized care, expert support, and evidence-based methods — built around your child.
             </p>
           </div>
@@ -70,9 +90,13 @@ const WhyChooseUs = () => {
               variants={fadeUp}
               whileHover={{ y: -5 }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
-              className="group relative bg-white rounded-2xl p-7 border border-[#EDE7F6] hover:border-[#DDD6FE] hover:shadow-[0_8px_32px_-8px_rgba(124,58,237,0.12)] transition-all duration-300 overflow-hidden"
+              className="group relative rounded-2xl p-7 transition-all duration-300 overflow-hidden"
+              style={{
+                background: dark ? "#111" : "#fff",
+                border: `1px solid ${dark ? "#1e1e1e" : "#EDE7F6"}`,
+              }}
             >
-              {/* Subtle top accent bar */}
+              {/* Top accent bar */}
               <div
                 className="absolute top-0 left-0 right-0 h-[3px] rounded-t-2xl transition-all duration-300 group-hover:h-[4px]"
                 style={{ backgroundColor: item.accent }}
@@ -80,21 +104,27 @@ const WhyChooseUs = () => {
 
               {/* Number */}
               <span
-                className="font-playfair text-[56px] font-bold leading-none mb-6 block transition-colors duration-300"
-                style={{ color: item.accent, opacity: 0.12 }}
+                className="font-playfair text-[56px] font-bold leading-none mb-6 block"
+                style={{ color: item.accent, opacity: dark ? 0.18 : 0.12 }}
               >
                 {item.number}
               </span>
 
               {/* Left rule + text */}
               <div
-                className="pl-4 border-l-2 transition-colors duration-300"
+                className="pl-4 border-l-2"
                 style={{ borderColor: item.accent }}
               >
-                <h3 className="font-semibold text-[#1a0a3b] text-[16px] leading-snug mb-3">
+                <h3
+                  className="font-semibold text-[16px] leading-snug mb-3"
+                  style={{ color: dark ? "#fff" : "#1a0a3b" }}
+                >
                   {item.title}
                 </h3>
-                <p className="text-[#7b6fa0] text-[13.5px] leading-relaxed">
+                <p
+                  className="text-[13.5px] leading-relaxed"
+                  style={{ color: dark ? "#aaa" : "#7b6fa0" }}
+                >
                   {item.desc}
                 </p>
               </div>
@@ -114,9 +144,13 @@ const WhyChooseUs = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="mt-14 pt-10 border-t border-[#EDE7F6] flex flex-col sm:flex-row items-center justify-between gap-6"
+          className="mt-14 pt-10 flex flex-col sm:flex-row items-center justify-between gap-6"
+          style={{ borderTop: `1px solid ${dark ? "#1e1e1e" : "#EDE7F6"}` }}
         >
-          <p className="text-[#7b6fa0] text-[13px]">
+          <p
+            className="text-[13px]"
+            style={{ color: dark ? "#aaa" : "#7b6fa0" }}
+          >
             Trusted by families across the region since 2012.
           </p>
           <div className="flex items-center gap-8">
@@ -126,8 +160,18 @@ const WhyChooseUs = () => {
               { value: "12+", label: "Years Experience" },
             ].map((s, i) => (
               <div key={i} className="text-center">
-                <p className="font-playfair text-xl font-bold text-[#1a0a3b]">{s.value}</p>
-                <p className="text-[11px] text-[#7b6fa0] mt-0.5">{s.label}</p>
+                <p
+                  className="font-playfair text-xl font-bold"
+                  style={{ color: dark ? "#fff" : "#1a0a3b" }}
+                >
+                  {s.value}
+                </p>
+                <p
+                  className="text-[11px] mt-0.5"
+                  style={{ color: dark ? "#aaa" : "#7b6fa0" }}
+                >
+                  {s.label}
+                </p>
               </div>
             ))}
           </div>

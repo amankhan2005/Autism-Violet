@@ -47,7 +47,7 @@ const Kenya = () => {
         {/* ── HEADING ── */}
         <motion.h1
           variants={fadeUp}
-          className="font-playfair text-4xl md:text-5xl font-bold text-[#1a0a3b] leading-[1.15] mb-5 mt-4"
+          className="font-playfair text-4xl md:text-5xl font-bold text-[#6A3FA0] leading-[1.15] mb-5 mt-4"
         >
           Autism Violet —{" "}
           <em className="italic text-orange-500">Kenya</em>

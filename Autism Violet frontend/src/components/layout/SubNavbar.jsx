@@ -1,6 +1,9 @@
 import { Link } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext"; // ✅ ADD
 
 const SubNavbar = () => {
+  const { dark } = useTheme(); // ✅ GLOBAL THEME
+
   const links = [
     { name: "Early Intervention", path: "/early-intervention" },
     { name: "Therapy Services", path: "/therapies" },
@@ -12,12 +15,16 @@ const SubNavbar = () => {
 
   return (
     <div
-      className="w-full text-white text-sm sticky top-[72px] z-40 overflow-hidden"
+      className="w-full text-sm sticky top-[72px] z-40 overflow-hidden transition-all duration-300"
       style={{
-        background: "linear-gradient(90deg, #6A3FA0, #B58ED6)",
+        background: dark
+          ? "#000"
+          : "linear-gradient(90deg, #6A3FA0, #B58ED6)",
+        color: "#fff",
+        borderBottom: dark ? "1px solid #222" : "none",
       }}
     >
-      {/* 💻 Desktop (8xl container) */}
+      {/* 💻 Desktop */}
       <div className="hidden md:flex w-full">
         <div className="max-w-[1440px] mx-auto px-6 flex items-center justify-center gap-10 h-[52px]">
 
@@ -30,14 +37,17 @@ const SubNavbar = () => {
               {link.name}
 
               {/* Hover underline */}
-              <span className="absolute left-0 -bottom-1 w-0 h-[2px] bg-white group-hover:w-full transition-all duration-300"></span>
+              <span
+                className="absolute left-0 -bottom-1 w-0 h-[2px] transition-all duration-300 group-hover:w-full"
+                style={{ background: "#fff" }}
+              />
             </Link>
           ))}
 
         </div>
       </div>
 
-      {/* 📱 Mobile Marquee (full width) */}
+      {/* 📱 Mobile Marquee */}
       <div className="md:hidden h-[52px] flex items-center overflow-hidden">
         <div className="flex gap-8 whitespace-nowrap animate-marquee">
           {[...links, ...links].map((link, index) => (

@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import Container from "../common/Container";
 import { fadeUp, staggerContainer } from "../../utils/animations";
+import { useTheme } from "../../context/ThemeContext";
 
 const services = [
   {
@@ -28,8 +29,24 @@ const services = [
 ];
 
 const ServicesPreview = () => {
+  const { dark } = useTheme();
+
+  // ✅ DESIGN SYSTEM COLORS
+  const colors = {
+    bg: dark ? "#000" : "#fff",
+    card: dark ? "#0f0f0f" : "#faf9ff",
+    border: dark ? "#1f1f1f" : "#EDE7F6",
+    text: dark ? "#fff" : "#1a0a3b",
+    muted: dark ? "#bbb" : "#7b6fa0",
+    primary: "#7C3AED",
+    accent: "#F97316",
+  };
+
   return (
-    <section className="py-20 md:py-28 bg-white">
+    <section
+      className="py-20 md:py-28 transition-colors duration-300"
+      style={{ background: colors.bg }}
+    >
       <Container>
 
         {/* Header */}
@@ -40,15 +57,26 @@ const ServicesPreview = () => {
           viewport={{ once: true }}
           className="mb-16"
         >
-          <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#7C3AED] mb-4">
+          <p
+            className="text-[11px] font-semibold tracking-[0.2em] uppercase mb-4"
+            style={{ color: colors.primary }}
+          >
             What We Offer
           </p>
+
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
-            <h2 className="font-playfair text-4xl md:text-5xl font-bold text-[#1a0a3b] leading-[1.15] max-w-[440px]">
+            <h2
+              className="font-playfair text-4xl md:text-5xl font-bold leading-[1.15] max-w-[440px]"
+              style={{ color: colors.text }}
+            >
               Programs built for{" "}
               <em className="italic text-orange-500">every stage</em>
             </h2>
-            <p className="text-[#5a4e72] text-[15px] leading-relaxed max-w-[320px] md:text-right">
+
+            <p
+              className="text-[15px] leading-relaxed max-w-[320px] md:text-right"
+              style={{ color: colors.muted }}
+            >
               Personalized support from early childhood through school — wherever your child is in their journey.
             </p>
           </div>
@@ -68,24 +96,51 @@ const ServicesPreview = () => {
               variants={fadeUp}
               whileHover={{ y: -5 }}
               transition={{ type: "spring", stiffness: 300, damping: 22 }}
-              className="group relative bg-[#faf9ff] rounded-2xl p-8 border border-[#EDE7F6] hover:border-[#DDD6FE] hover:shadow-[0_8px_32px_-8px_rgba(124,58,237,0.12)] transition-all duration-300 flex flex-col"
+              className="group relative rounded-2xl p-8 transition-all duration-300 flex flex-col"
+              style={{
+                background: colors.card,
+                border: `1px solid ${colors.border}`,
+              }}
             >
-              {/* Top row: number + tag */}
+              {/* Top row */}
               <div className="flex items-start justify-between mb-6">
-                <span className="font-playfair text-[44px] font-bold leading-none text-[#7C3AED] opacity-[0.13]">
+                <span
+                  className="font-playfair text-[44px] font-bold leading-none"
+                  style={{
+                    color: colors.primary,
+                    opacity: dark ? 0.25 : 0.13,
+                  }}
+                >
                   {service.number}
                 </span>
-                <span className="text-[10px] font-semibold tracking-[0.15em] uppercase text-[#7C3AED] bg-[#EDE7F6] px-3 py-1 rounded-full">
+
+                <span
+                  className="text-[10px] font-semibold tracking-[0.15em] uppercase px-3 py-1 rounded-full"
+                  style={{
+                    color: colors.primary,
+                    background: dark ? "#1a1a1a" : "#EDE7F6",
+                  }}
+                >
                   {service.tag}
                 </span>
               </div>
 
               {/* Content */}
-              <div className="pl-4 border-l-2 border-[#F97316] flex-1">
-                <h3 className="font-semibold text-[#1a0a3b] text-[16px] leading-snug mb-3">
+              <div
+                className="pl-4 border-l-2 flex-1"
+                style={{ borderColor: colors.accent }}
+              >
+                <h3
+                  className="font-semibold text-[16px] leading-snug mb-3"
+                  style={{ color: colors.text }}
+                >
                   {service.title}
                 </h3>
-                <p className="text-[#7b6fa0] text-[13.5px] leading-relaxed">
+
+                <p
+                  className="text-[13.5px] leading-relaxed"
+                  style={{ color: colors.muted }}
+                >
                   {service.desc}
                 </p>
               </div>
@@ -94,20 +149,30 @@ const ServicesPreview = () => {
               <div className="mt-8 flex items-center gap-2">
                 <Link
                   to={service.link}
-                  className="text-[#7C3AED] text-[13px] font-semibold group-hover:text-[#F97316] transition-colors duration-200 flex items-center gap-1.5"
+                  className="text-[13px] font-semibold flex items-center gap-1.5 transition"
+                  style={{ color: colors.primary }}
                 >
                   Learn more
                   <svg
-                    className="w-3.5 h-3.5 translate-x-0 group-hover:translate-x-1 transition-transform duration-200"
-                    fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"
+                    className="w-3.5 h-3.5 group-hover:translate-x-1 transition"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2.5}
+                    viewBox="0 0 24 24"
                   >
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
                 </Link>
               </div>
 
-              {/* Corner dot */}
-              <div className="absolute bottom-5 right-5 w-2 h-2 rounded-full bg-[#F97316] opacity-20 group-hover:opacity-50 transition-opacity duration-300" />
+              {/* Dot */}
+              <div
+                className="absolute bottom-5 right-5 w-2 h-2 rounded-full transition-opacity duration-300"
+                style={{
+                  background: colors.accent,
+                  opacity: dark ? 0.4 : 0.2,
+                }}
+              />
             </motion.div>
           ))}
         </motion.div>
@@ -118,24 +183,28 @@ const ServicesPreview = () => {
           initial="hidden"
           whileInView="show"
           viewport={{ once: true }}
-          className="mt-14 flex flex-col sm:flex-row items-center justify-between gap-6 pt-10 border-t border-[#EDE7F6]"
+          className="mt-14 flex flex-col sm:flex-row items-center justify-between gap-6 pt-10"
+          style={{ borderTop: `1px solid ${colors.border}` }}
         >
-          <p className="text-[#7b6fa0] text-[13px]">
+          <p style={{ color: colors.muted }} className="text-[13px]">
             Not sure which program fits? We'll guide you.
           </p>
+
           <div className="flex items-center gap-4">
             <Link
               to="/services"
-              className="text-[13px] font-semibold text-[#7C3AED] hover:text-[#F97316] transition-colors duration-200 flex items-center gap-1.5"
+              className="text-[13px] font-semibold flex items-center gap-1.5"
+              style={{ color: colors.primary }}
             >
               View all services
-              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
             </Link>
+
             <Link
               to="/contact-us"
-              className="bg-[#1a0a3b] hover:bg-[#7C3AED] text-white text-[13px] font-semibold px-6 py-3 rounded-full transition-colors duration-200"
+              className="text-white text-[13px] font-semibold px-6 py-3 rounded-full transition"
+              style={{
+                background: dark ? "#7C3AED" : "#1a0a3b",
+              }}
             >
               Book a Consultation
             </Link>

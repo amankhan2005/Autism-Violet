@@ -7,6 +7,7 @@ export default {
         primary: "#7F5AF0",
         dark: "#111111",
         light: "#666666",
+        darkMode: "class",
       },
       fontFamily: {
         sans: ["Inter", "sans-serif"],
