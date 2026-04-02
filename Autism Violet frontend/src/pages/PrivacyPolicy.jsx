@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useTheme } from "../context/ThemeContext";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -52,8 +53,29 @@ const sections = [
 ];
 
 const PrivacyPolicy = () => {
+  const { dark } = useTheme();
+
+  const colors = {
+    bg:          dark ? "#0a0a0a" : "#faf9ff",
+    card:        dark ? "#161616" : "#ffffff",
+    border:      dark ? "#262626" : "#EDE7F6",
+    text:        dark ? "#efefef" : "#1a0a3b",
+    textMid:     dark ? "#c0c0c0" : "#5a4e72",
+    muted:       dark ? "#888888" : "#7b6fa0",
+    statDiv:     dark ? "#2a2a2a" : "#DDD6FE",
+    primary:     "#7C3AED",
+    accent:      "#F97316",
+  };
+
+  const hoverShadow = dark
+    ? "0 8px 32px -8px rgba(124,58,237,0.25)"
+    : "0 8px 32px -8px rgba(124,58,237,0.12)";
+
   return (
-    <div className="bg-[#faf9ff] py-24 px-4">
+    <div 
+      className="py-24 px-4"
+      style={{ background: colors.bg, transition: "background 0.3s" }}
+    >
       <div className="max-w-4xl mx-auto">
 
         <motion.div
@@ -64,19 +86,31 @@ const PrivacyPolicy = () => {
 
           {/* ── HERO ── */}
           <motion.div variants={fadeUp} className="text-center mb-16">
-            <p className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#7C3AED] mb-5">
+            <p
+              className="text-[11px] font-semibold tracking-[0.2em] uppercase mb-5"
+              style={{ color: colors.primary }}
+            >
               Legal
             </p>
-            <h1 className="font-playfair text-4xl md:text-6xl font-bold text-[#1a0a3b] leading-[1.15] mb-6">
+            <h1
+              className="font-playfair text-4xl md:text-6xl font-bold leading-[1.15] mb-6"
+              style={{ color: colors.text, transition: "color 0.3s" }}
+            >
               Privacy{" "}
-              <em className="italic text-orange-500">Policy</em>
+              <em className="italic" style={{ color: colors.accent }}>Policy</em>
             </h1>
-            <p className="text-[#5a4e72] text-[15px] leading-relaxed max-w-[560px] mx-auto">
+            <p
+              className="text-[15px] leading-relaxed max-w-[560px] mx-auto"
+              style={{ color: colors.textMid, transition: "color 0.3s" }}
+            >
               At Autism Violet, we are committed to protecting the privacy and
               confidentiality of our customers' personal information. This policy
               explains how we handle mobile information and text messaging consent.
             </p>
-            <div className="w-10 h-0.5 bg-[#DDD6FE] rounded-full mx-auto mt-8" />
+            <div
+              className="w-10 h-0.5 rounded-full mx-auto mt-8"
+              style={{ background: colors.statDiv, transition: "background 0.3s" }}
+            />
           </motion.div>
 
           {/* ── SECTIONS GRID ── */}
@@ -88,9 +122,14 @@ const PrivacyPolicy = () => {
               <motion.div
                 key={i}
                 variants={fadeUp}
-                whileHover={{ y: -5 }}
+                whileHover={{ y: -5, boxShadow: hoverShadow }}
                 transition={{ type: "spring", stiffness: 300, damping: 22 }}
-                className="group relative bg-white rounded-2xl p-7 border border-[#EDE7F6] hover:border-[#DDD6FE] hover:shadow-[0_8px_32px_-8px_rgba(124,58,237,0.12)] transition-all duration-300 overflow-hidden"
+                className="group relative rounded-2xl p-7 overflow-hidden transition-all duration-300"
+                style={{
+                  background: colors.card,
+                  border: `1px solid ${colors.border}`,
+                  transition: "background 0.3s, border-color 0.3s, box-shadow 0.3s",
+                }}
               >
                 {/* top accent bar */}
                 <div
@@ -107,12 +146,18 @@ const PrivacyPolicy = () => {
                 </span>
 
                 <div className="pl-4 border-l-2" style={{ borderColor: item.accent }}>
-                  <h2 className="font-semibold text-[#1a0a3b] text-[15px] leading-snug mb-3">
+                  <h2
+                    className="font-semibold text-[15px] leading-snug mb-3"
+                    style={{ color: colors.text, transition: "color 0.3s" }}
+                  >
                     {item.title}
                   </h2>
 
                   {item.body && (
-                    <p className="text-[#7b6fa0] text-[13.5px] leading-relaxed">
+                    <p
+                      className="text-[13.5px] leading-relaxed"
+                      style={{ color: colors.muted, transition: "color 0.3s" }}
+                    >
                       {item.body}
                     </p>
                   )}
@@ -120,7 +165,11 @@ const PrivacyPolicy = () => {
                   {item.list && (
                     <ul className="space-y-2 mb-3">
                       {item.list.map((li, j) => (
-                        <li key={j} className="flex items-center gap-2 text-[13.5px] text-[#7b6fa0]">
+                        <li
+                          key={j}
+                          className="flex items-center gap-2 text-[13.5px]"
+                          style={{ color: colors.muted, transition: "color 0.3s" }}
+                        >
                           <span
                             className="w-1.5 h-1.5 rounded-full flex-shrink-0"
                             style={{ backgroundColor: item.accent }}
@@ -132,7 +181,10 @@ const PrivacyPolicy = () => {
                   )}
 
                   {item.footer && (
-                    <p className="text-[13px] text-[#7b6fa0] leading-relaxed mt-2 italic">
+                    <p
+                      className="text-[13px] leading-relaxed mt-2 italic"
+                      style={{ color: colors.muted, transition: "color 0.3s" }}
+                    >
                       {item.footer}
                     </p>
                   )}
@@ -150,7 +202,11 @@ const PrivacyPolicy = () => {
           {/* ── CONTACT CARD ── */}
           <motion.div
             variants={fadeUp}
-            className="relative bg-[#643C85] rounded-2xl p-10 overflow-hidden text-center"
+            className="relative rounded-2xl p-10 overflow-hidden text-center"
+            style={{
+              background: dark ? "#120a2e" : "#643C85",
+              transition: "background 0.3s",
+            }}
           >
             {/* decorative rings */}
             {[400, 580, 760].map((size, i) => (
@@ -160,6 +216,21 @@ const PrivacyPolicy = () => {
                 style={{ width: size, height: size, top: -(size * 0.38) }}
               />
             ))}
+
+            {dark && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-60px",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  width: "500px",
+                  height: "300px",
+                  background: "radial-gradient(ellipse, rgba(124,58,237,0.25) 0%, transparent 70%)",
+                  pointerEvents: "none",
+                }}
+              />
+            )}
 
             <div className="relative z-10">
               <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white/80 text-[11px] font-semibold tracking-[0.1em] uppercase px-4 py-1.5 rounded-full mb-5">
@@ -184,8 +255,8 @@ const PrivacyPolicy = () => {
                   info@autismviolet.com
                 </a>
                 
-                  <a
-                    href="tel:+16174672342"
+                <a
+                  href="tel:+16174672342"
                   className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white hover:bg-white/20 px-6 py-3 rounded-full text-sm font-semibold transition-all duration-200 hover:-translate-y-px"
                 >
                   <svg className="w-4 h-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5">

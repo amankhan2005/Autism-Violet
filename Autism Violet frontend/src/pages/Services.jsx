@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import Container from "../components/common/Container";
 import { fadeUp, staggerContainer } from "../utils/animations";
 import { Link } from "react-router-dom";
+import { useTheme } from "../context/ThemeContext";
 // manual images
 import earlyImg from "../assets/images/early.jpg";
 import schoolImg from "../assets/images/therapy.jpg";
@@ -74,15 +75,39 @@ Parents are actively involved throughout the process, learning techniques to sup
 ];
 
 const Services = () => {
+  const { dark } = useTheme();
+
+  const colors = {
+    bg:          dark ? "#0a0a0a" : "#faf9ff",
+    card:        dark ? "#161616" : "#ffffff",
+    border:      dark ? "#262626" : "#EDE7F6",
+    text:        dark ? "#efefef" : "#1a0a3b",
+    textMid:     dark ? "#c0c0c0" : "#5a4e72",
+    muted:       dark ? "#888888" : "#7b6fa0",
+    statDiv:     dark ? "#2a2a2a" : "#DDD6FE",
+    primary:     "#7C3AED",
+    accent:      "#F97316",
+  };
+
+  const iconBg = (accent) => {
+    if (accent === "#F97316") return dark ? "rgba(249,115,22,0.15)" : "#FFF3E8";
+    return dark ? "rgba(124,58,237,0.2)" : "#EDE7F6";
+  };
+
+  const badgeShadow = dark
+    ? "0 4px 24px rgba(0,0,0,0.5)"
+    : "0 4px 24px rgba(26,10,59,0.12)";
+
   return (
-    <div className="bg-[#faf9ff]">
+    <div style={{ background: colors.bg, transition: "background 0.3s" }}>
 
       {/* ── HERO ──────────────────────────────────────────────── */}
       <section className="py-24 text-center">
         <Container>
           <motion.p
             variants={fadeUp} initial="hidden" animate="show"
-            className="text-[11px] font-semibold tracking-[0.2em] uppercase text-[#7C3AED] mb-5"
+            className="text-[11px] font-semibold tracking-[0.2em] uppercase mb-5"
+            style={{ color: colors.primary }}
           >
             What We Offer
           </motion.p>
@@ -90,16 +115,18 @@ const Services = () => {
           <motion.h1
             variants={fadeUp} initial="hidden" animate="show"
             transition={{ delay: 0.08 }}
-            className="font-playfair text-4xl md:text-7xl font-bold text-[#1a0a3b] leading-[1.15] mb-6"
+            className="font-playfair text-4xl md:text-7xl font-bold leading-[1.15] mb-6"
+            style={{ color: colors.text, transition: "color 0.3s" }}
           >
             Our ABA Therapy{" "}
-            <em className="italic text-orange-500">Services</em>
+            <em className="italic" style={{ color: colors.accent }}>Services</em>
           </motion.h1>
 
           <motion.p
             variants={fadeUp} initial="hidden" animate="show"
             transition={{ delay: 0.16 }}
-            className="text-[#5a4e72] text-[15px] leading-relaxed max-w-[560px] mx-auto mb-10"
+            className="text-[15px] leading-relaxed max-w-[560px] mx-auto mb-10"
+            style={{ color: colors.textMid, transition: "color 0.3s" }}
           >
             Explore our specialized therapy programs designed to support children
             with autism in building essential life skills, communication, and independence.
@@ -109,16 +136,30 @@ const Services = () => {
           <motion.div
             variants={fadeUp} initial="hidden" animate="show"
             transition={{ delay: 0.24 }}
-            className="inline-flex gap-6 pt-6 border-t border-[#DDD6FE]"
+            className="inline-flex gap-6 pt-6"
+            style={{ borderTop: `1px solid ${colors.statDiv}`, transition: "border-color 0.3s" }}
           >
             {stats.map((s, i) => (
               <div key={i} className="flex items-start gap-6">
                 <div className="text-center">
-                  <p className="font-playfair text-2xl font-bold text-[#1a0a3b]">{s.value}</p>
-                  <p className="text-[11px] text-[#7b6fa0] mt-0.5">{s.label}</p>
+                  <p
+                    className="font-playfair text-2xl font-bold"
+                    style={{ color: colors.text, transition: "color 0.3s" }}
+                  >
+                    {s.value}
+                  </p>
+                  <p
+                    className="text-[11px] mt-0.5"
+                    style={{ color: colors.muted, transition: "color 0.3s" }}
+                  >
+                    {s.label}
+                  </p>
                 </div>
                 {i < stats.length - 1 && (
-                  <div className="w-px self-stretch bg-[#DDD6FE]" />
+                  <div
+                    className="w-px self-stretch"
+                    style={{ background: colors.statDiv, transition: "background 0.3s" }}
+                  />
                 )}
               </div>
             ))}
@@ -143,7 +184,10 @@ const Services = () => {
                   >
                     {svc.id}
                   </span>
-                  <div className="h-px flex-1 bg-[#DDD6FE]" />
+                  <div
+                    className="h-px flex-1"
+                    style={{ background: colors.statDiv, transition: "background 0.3s" }}
+                  />
                   <span
                     className="text-[11px] font-semibold tracking-[0.2em] uppercase"
                     style={{ color: svc.accent }}
@@ -170,23 +214,41 @@ const Services = () => {
                     />
                     {/* Decorative circle */}
                     <div
-                      className="absolute -bottom-4 w-20 h-20 rounded-full border-2 border-[#DDD6FE] -z-10"
-                      style={{ [svc.reverse ? "left" : "right"]: "-16px" }}
+                      className="absolute -bottom-4 w-20 h-20 rounded-full border-2 -z-10"
+                      style={{
+                        borderColor: colors.statDiv,
+                        [svc.reverse ? "left" : "right"]: "-16px",
+                        transition: "border-color 0.3s",
+                      }}
                     />
                     {/* Floating badge */}
                     <div
-                      className="absolute top-5 left-5 bg-white rounded-2xl px-4 py-3 flex items-center gap-3"
-                      style={{ boxShadow: "0 4px 24px rgba(26,10,59,0.12)" }}
+                      className="absolute top-5 left-5 rounded-2xl px-4 py-3 flex items-center gap-3"
+                      style={{
+                        background: colors.card,
+                        boxShadow: badgeShadow,
+                        transition: "background 0.3s, box-shadow 0.3s",
+                      }}
                     >
                       <div
                         className="w-9 h-9 rounded-full flex items-center justify-center text-base flex-shrink-0"
-                        style={{ background: svc.accent === "#F97316" ? "#FFF3E8" : "#EDE7F6" }}
+                        style={{ background: iconBg(svc.accent), transition: "background 0.3s" }}
                       >
                         💜
                       </div>
                       <div>
-                        <p className="text-[13px] font-semibold text-[#1a0a3b] m-0">Science-backed care</p>
-                        <p className="text-[11px] text-[#7b6fa0] m-0">Every session, every child</p>
+                        <p
+                          className="text-[13px] font-semibold m-0"
+                          style={{ color: colors.text, transition: "color 0.3s" }}
+                        >
+                          Science-backed care
+                        </p>
+                        <p
+                          className="text-[11px] m-0"
+                          style={{ color: colors.muted, transition: "color 0.3s" }}
+                        >
+                          Every session, every child
+                        </p>
                       </div>
                     </div>
                   </motion.div>
@@ -198,16 +260,19 @@ const Services = () => {
                     viewport={{ once: true }}
                     transition={{ duration: 0.55 }}
                   >
-                    <h2 className="font-playfair text-3xl md:text-4xl font-bold text-[#1a0a3b] leading-[1.15] mb-5">
+                    <h2
+                      className="font-playfair text-3xl md:text-4xl font-bold leading-[1.15] mb-5"
+                      style={{ color: colors.text, transition: "color 0.3s" }}
+                    >
                       {svc.title.includes("&") ? (
                         <>
                           {svc.title.split("&")[0]}&amp;
-                          <em className="italic text-orange-500">{svc.title.split("&")[1]}</em>
+                          <em className="italic" style={{ color: colors.accent }}>{svc.title.split("&")[1]}</em>
                         </>
                       ) : (
                         <>
                           {svc.title.split(" ").slice(0, -1).join(" ")}{" "}
-                          <em className="italic text-orange-500">{svc.title.split(" ").slice(-1)}</em>
+                          <em className="italic" style={{ color: colors.accent }}>{svc.title.split(" ").slice(-1)}</em>
                         </>
                       )}
                     </h2>
@@ -215,7 +280,11 @@ const Services = () => {
                     {/* Body paragraphs */}
                     <div className="flex flex-col gap-4 mb-8">
                       {svc.body.trim().split("\n\n").map((para, i) => (
-                        <p key={i} className="text-[#5a4e72] text-[15px] leading-relaxed">
+                        <p
+                          key={i}
+                          className="text-[15px] leading-relaxed"
+                          style={{ color: colors.textMid, transition: "color 0.3s" }}
+                        >
                           {para}
                         </p>
                       ))}
@@ -230,20 +299,44 @@ const Services = () => {
                           whileInView={{ opacity: 1, x: 0 }}
                           viewport={{ once: true }}
                           transition={{ delay: fi * 0.08 }}
-                          className="bg-white border border-[#EDE7F6] rounded-xl px-5 py-4"
+                          className="rounded-xl px-5 py-4"
+                          style={{
+                            background: colors.card,
+                            border: `1px solid ${colors.border}`,
+                            transition: "background 0.3s, border-color 0.3s",
+                          }}
                         >
                           <div className="flex items-start gap-3">
                             <div
                               className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                              style={{ background: fi % 2 === 0 ? "#FFF3E8" : "#EDE7F6" }}
+                              style={{
+                                background: iconBg(fi % 2 === 0 ? "#F97316" : "#7C3AED"),
+                                transition: "background 0.3s",
+                              }}
                             >
                               <svg width="10" height="10" viewBox="0 0 12 12" fill="none">
-                                <path d="M2 6l3 3 5-5" stroke={fi % 2 === 0 ? "#F97316" : "#7C3AED"} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                                <path
+                                  d="M2 6l3 3 5-5"
+                                  stroke={fi % 2 === 0 ? "#F97316" : "#7C3AED"}
+                                  strokeWidth="1.8"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
                               </svg>
                             </div>
                             <div>
-                              <p className="text-[13px] font-semibold text-[#1a0a3b] mb-1">{faq.q}</p>
-                              <p className="text-[13px] text-[#7b6fa0]">{faq.a}</p>
+                              <p
+                                className="text-[13px] font-semibold mb-1"
+                                style={{ color: colors.text, transition: "color 0.3s" }}
+                              >
+                                {faq.q}
+                              </p>
+                              <p
+                                className="text-[13px]"
+                                style={{ color: colors.muted, transition: "color 0.3s" }}
+                              >
+                                {faq.a}
+                              </p>
                             </div>
                           </div>
                         </motion.div>
@@ -259,7 +352,13 @@ const Services = () => {
       </section>
 
       {/* ── CTA ───────────────────────────────────────────────── */}
-      <section className="relative bg-[#643C85] py-20 md:py-28 overflow-hidden">
+      <section
+        className="relative py-20 md:py-28 overflow-hidden"
+        style={{
+          background: dark ? "#120a2e" : "#643C85",
+          transition: "background 0.3s",
+        }}
+      >
         {[500, 740, 980].map((size, i) => (
           <div
             key={i}
@@ -267,6 +366,21 @@ const Services = () => {
             style={{ width: size, height: size, top: -(size * 0.36) }}
           />
         ))}
+
+        {dark && (
+          <div
+            style={{
+              position: "absolute",
+              top: "-60px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "500px",
+              height: "300px",
+              background: "radial-gradient(ellipse, rgba(124,58,237,0.25) 0%, transparent 70%)",
+              pointerEvents: "none",
+            }}
+          />
+        )}
 
         <Container>
           <motion.div
