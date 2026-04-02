@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import Container from "../common/Container";
+import { useTheme } from "../../context/ThemeContext";
 import logo from "../../assets/logo/logo.png";
 
 const navLinks = [
@@ -9,7 +10,7 @@ const navLinks = [
   { label: "FAQ", to: "/faq" },
   { label: "Career", to: "/career" },
   { label: "Contact", to: "/contact-us" },
-    { label: "Kenya program", to: "/kenya" },
+  { label: "Kenya program", to: "/kenya" },
   { label: "Privacy policy", to: "/privacy-policy" },
 ];
 
@@ -67,8 +68,25 @@ const socials = [
 ];
 
 const Footer = () => {
+  const { dark } = useTheme();
+
+  const colors = {
+    bg:          dark ? "#0a0a0a" : "#faf9ff",
+    border:      dark ? "#1f1f2e" : "#DDD6FE",
+    heading:     dark ? "#c4b5fd" : "#4B2C73",
+    body:        dark ? "#a89bc2" : "#5a4e72",
+    muted:       dark ? "#7a6a9a" : "#9880c0",
+    iconBg:      dark ? "#1e1530" : "#EEEDFE",
+    socialBg:    dark ? "#111" : "#fff",
+    socialHover: dark ? "#1e1530" : "#EEEDFE",
+    primary:     "#7C3AED",
+  };
+
   return (
-    <footer className="bg-[#faf9ff] border-t border-[#DDD6FE]">
+    <footer
+      className="border-t transition-colors duration-300"
+      style={{ background: colors.bg, borderColor: colors.border }}
+    >
       <Container>
 
         {/* MAIN GRID */}
@@ -78,23 +96,32 @@ const Footer = () => {
           <div>
             <div className="flex items-center gap-3 mb-4">
               <img src={logo} alt="Autism Violet" className="h-18 w-auto" />
-              <h2 className="font-playfair text-xl font-bold  text-[#4B2C73]">
+              <h2
+                className="font-playfair text-xl font-bold"
+                style={{ color: colors.heading }}
+              >
                 Autism Violet
               </h2>
             </div>
-            <p className="text-[13.5px] text-[#5a4e72] leading-relaxed max-w-xs mb-0">
+            <p
+              className="text-[13.5px] leading-relaxed max-w-xs mb-0"
+              style={{ color: colors.body }}
+            >
               Helping children with autism unlock their potential through
               science-backed, compassionate care — building communication,
               confidence, and independence every day.
             </p>
           </div>
 
-          {/* NAV + CONTACT — 2-col on mobile, separate cols on md+ */}
+          {/* NAV + CONTACT */}
           <div className="grid grid-cols-2 md:contents gap-6 sm:gap-8">
 
             {/* NAVIGATION */}
             <div>
-              <h3 className="text-[13px] font-semibold text-[#4B2C73] tracking-widest uppercase mb-4">
+              <h3
+                className="text-[13px] font-semibold tracking-widest uppercase mb-4"
+                style={{ color: colors.heading }}
+              >
                 Navigation
               </h3>
               <div className="flex flex-col gap-2.5">
@@ -102,7 +129,10 @@ const Footer = () => {
                   <Link
                     key={link.to}
                     to={link.to}
-                    className="text-[13px] text-[#5a4e72] hover:text-[#7C3AED] transition-colors duration-150"
+                    className="text-[13px] transition-colors duration-150"
+                    style={{ color: colors.body }}
+                    onMouseEnter={e => e.currentTarget.style.color = colors.primary}
+                    onMouseLeave={e => e.currentTarget.style.color = colors.body}
                   >
                     {link.label}
                   </Link>
@@ -112,7 +142,10 @@ const Footer = () => {
 
             {/* CONTACT */}
             <div>
-              <h3 className="text-[13px] font-semibold text-[#4B2C73] tracking-widest uppercase mb-4">
+              <h3
+                className="text-[13px] font-semibold tracking-widest uppercase mb-4"
+                style={{ color: colors.heading }}
+              >
                 Contact
               </h3>
               <div className="flex flex-col gap-4">
@@ -130,14 +163,23 @@ const Footer = () => {
                       rel="noreferrer"
                       className="flex items-start gap-2.5 hover:opacity-80 transition"
                     >
-                      <div className="w-7 h-7 rounded-lg bg-[#EEEDFE] flex items-center justify-center flex-shrink-0 mt-0.5">
+                      <div
+                        className="w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5"
+                        style={{ background: colors.iconBg }}
+                      >
                         {item.icon}
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[11px] text-[#9880c0] uppercase tracking-wider mb-0.5">
+                        <p
+                          className="text-[11px] uppercase tracking-wider mb-0.5"
+                          style={{ color: colors.muted }}
+                        >
                           {item.label}
                         </p>
-                        <p className="text-[12.5px] text-[#5a4e72] break-words leading-snug">
+                        <p
+                          className="text-[12.5px] break-words leading-snug"
+                          style={{ color: colors.body }}
+                        >
                           {item.value}
                         </p>
                       </div>
@@ -151,9 +193,12 @@ const Footer = () => {
         </div>
 
         {/* BOTTOM BAR */}
-        <div className="border-t border-[#DDD6FE] py-5 flex flex-col md:flex-row items-center justify-between gap-3">
+        <div
+          className="border-t py-5 flex flex-col md:flex-row items-center justify-between gap-3"
+          style={{ borderColor: colors.border }}
+        >
 
-          {/* Socials — top on mobile */}
+          {/* Socials */}
           <div className="flex gap-2 md:order-last">
             {socials.map((s) => (
               <a
@@ -162,24 +207,44 @@ const Footer = () => {
                 target="_blank"
                 rel="noreferrer"
                 aria-label={s.label}
-                className="w-8 h-8 rounded-full border border-[#DDD6FE] bg-white flex items-center justify-center hover:bg-[#EEEDFE] hover:border-[#7C3AED] transition-all duration-150"
+                className="w-8 h-8 rounded-full flex items-center justify-center transition-all duration-150"
+                style={{
+                  background: colors.socialBg,
+                  border: `1px solid ${colors.border}`,
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = colors.socialHover;
+                  e.currentTarget.style.borderColor = colors.primary;
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = colors.socialBg;
+                  e.currentTarget.style.borderColor = colors.border;
+                }}
               >
                 {s.icon}
               </a>
             ))}
           </div>
 
-          <p className="text-[12px] text-[#9880c0] text-center md:text-left">
+          <p
+            className="text-[12px] text-center md:text-left"
+            style={{ color: colors.muted }}
+          >
             © {new Date().getFullYear()} Autism Violet · All rights reserved
           </p>
 
-          <p className="text-[12px] text-[#9880c0] text-center">
+          <p
+            className="text-[12px] text-center"
+            style={{ color: colors.muted }}
+          >
             Design & Developed by{" "}
+            
             <a
               href="https://www.webieapp.com/"
               target="_blank"
               rel="noreferrer"
-              className="text-[#7C3AED] font-medium hover:underline"
+              className="font-medium hover:underline"
+              style={{ color: colors.primary }}
             >
               WebieApp Solutions
             </a>

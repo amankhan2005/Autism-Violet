@@ -1,23 +1,38 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Container from "../components/common/Container";
+import { useTheme } from "../context/ThemeContext";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const Career = () => {
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    position: "",
-    experience: "",
-    message: "",
-    resume: null,
-  });
+  const { dark } = useTheme();
 
-  const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState(false);
-  const [error, setError] = useState("");
+  // ✅ DESIGN SYSTEM — mirrors InsuranceSection tokens
+  const colors = {
+    bg:       dark ? "#0a0a0a" : "#faf9ff",
+    surface:  dark ? "#111111" : "#ffffff",
+    card:     dark ? "#161616" : "#ffffff",
+    cardAlt:  dark ? "#0f0f0f" : "#f5f2ff",
+    border:   dark ? "#262626" : "#EDE7F6",
+    borderFocus: dark ? "#7C3AED" : "#7C3AED",
+    text:     dark ? "#efefef" : "#1a0a3b",
+    textSoft: dark ? "#c0c0c0" : "#4b4069",
+    muted:    dark ? "#888888" : "#6b7280",
+    primary:  "#7C3AED",
+    primaryHover: "#6D28D9",
+    accent:   "#F97316",
+    dark_hero: "#1a0a3b",
+  };
+
+  // ─── all original state & logic — untouched ───────────────────────────────
+  const [form, setForm] = useState({
+    name: "", email: "", phone: "", position: "",
+    experience: "", message: "", resume: null,
+  });
+  const [loading, setLoading]   = useState(false);
+  const [success, setSuccess]   = useState(false);
+  const [error,   setError]     = useState("");
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -28,145 +43,337 @@ const Career = () => {
     }
   };
 
-  const isValid =
-    form.name &&
-    form.email &&
-    form.phone &&
-    form.position &&
-    form.resume;
+  const isValid = form.name && form.email && form.phone && form.position && form.resume;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
     try {
       const formData = new FormData();
-      Object.keys(form).forEach((key) => {
-        formData.append(key, form[key]);
-      });
-
-      const res = await fetch(`${API_URL}/api/career`, {
-        method: "POST",
-        body: formData,
-      });
-
+      Object.keys(form).forEach((key) => formData.append(key, form[key]));
+      const res  = await fetch(`${API_URL}/api/career`, { method: "POST", body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
-
       setSuccess(true);
-      setForm({
-        name: "",
-        email: "",
-        phone: "",
-        position: "",
-        experience: "",
-        message: "",
-        resume: null,
-      });
+      setForm({ name: "", email: "", phone: "", position: "", experience: "", message: "", resume: null });
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
   };
+  // ─────────────────────────────────────────────────────────────────────────
 
-  const input =
-    "w-full border border-[#EDE7F6] px-4 py-3 rounded-xl focus:outline-none focus:border-[#7C3AED] text-sm";
+  const fadeUp = {
+    hidden: { opacity: 0, y: 28 },
+    show:   { opacity: 1, y: 0, transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] } },
+  };
+  const stagger = { show: { transition: { staggerChildren: 0.1 } } };
+
+  /* Shared input className — uses inline style for theming */
+  const inputBase = {
+    width: "100%",
+    background: colors.card,
+    border: `1px solid ${colors.border}`,
+    color: colors.text,
+    borderRadius: "12px",
+    padding: "12px 16px",
+    fontSize: "14px",
+    outline: "none",
+    transition: "border-color 0.2s",
+  };
+
+  const LeftCard = ({ children, style = {} }) => (
+    <div style={{
+      background: colors.card,
+      border: `1px solid ${colors.border}`,
+      borderRadius: "20px",
+      padding: "24px",
+      transition: "border-color 0.3s, box-shadow 0.3s",
+      ...style,
+    }}>
+      {children}
+    </div>
+  );
 
   return (
-    <div className="bg-[#faf9ff]">
+    <div style={{ background: colors.bg, transition: "background 0.3s" }}>
 
-      {/* HERO */}
-      <section className="py-28 text-center">
+      {/* ── HERO ─────────────────────────────────────────────── */}
+      <section style={{ paddingTop: "112px", paddingBottom: "80px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+
+        {/* soft radial glow behind hero text */}
+        <div style={{
+          position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)",
+          width: "600px", height: "300px",
+          background: dark
+            ? "radial-gradient(ellipse, rgba(124,58,237,0.10) 0%, transparent 70%)"
+            : "radial-gradient(ellipse, rgba(124,58,237,0.07) 0%, transparent 70%)",
+          pointerEvents: "none",
+        }} />
+
         <Container>
-          <motion.p className="text-xs tracking-[0.2em] uppercase text-[#7C3AED] mb-4">
-            Careers at Autism Violet
-          </motion.p>
+          <motion.div variants={stagger} initial="hidden" animate="show">
 
-          <motion.h1 className="font-playfair text-5xl md:text-7xl font-bold text-[#1a0a3b] leading-tight mb-4">
-            Build a Meaningful{" "}
-            <em className="italic text-[#6A3FA0]">Career</em>
-          </motion.h1>
+            <motion.p variants={fadeUp} style={{
+              fontSize: "11px", letterSpacing: "0.2em", textTransform: "uppercase",
+              color: colors.primary, marginBottom: "16px", fontWeight: 500,
+            }}>
+              Careers at Autism Violet
+            </motion.p>
 
-          <p className="text-gray-600 max-w-[550px] mx-auto text-[15px]">
-            Join a team dedicated to making a real difference in children's lives through compassionate and evidence-based care.
-          </p>
+            <motion.h1 variants={fadeUp} className="font-playfair" style={{
+              fontSize: "clamp(2.8rem, 6vw, 5rem)", fontWeight: 700,
+              color: colors.text, lineHeight: 1.1, marginBottom: "20px",
+            }}>
+              Build a Meaningful{" "}
+              <em style={{ color: colors.accent, fontStyle: "italic" }}>Career</em>
+            </motion.h1>
+
+            <motion.p variants={fadeUp} style={{
+              color: colors.muted, maxWidth: "520px", margin: "0 auto",
+              fontSize: "15px", lineHeight: 1.7,
+            }}>
+              Join a team dedicated to making a real difference in children's lives
+              through compassionate and evidence-based care.
+            </motion.p>
+
+          </motion.div>
         </Container>
       </section>
 
-      {/* MAIN */}
-      <section className="pb-24">
+      {/* ── MAIN GRID ─────────────────────────────────────────── */}
+      <section style={{ paddingBottom: "96px" }}>
         <Container>
-          <div className="grid md:grid-cols-2 gap-14 max-w-[1100px] mx-auto">
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "48px",
+            maxWidth: "1100px",
+            margin: "0 auto",
+          }}>
 
-            {/* LEFT SIDE */}
-            <motion.div className="flex flex-col gap-6">
+            {/* ── LEFT: info cards ─────────────────────── */}
+            <motion.div
+              variants={stagger} initial="hidden" animate="show"
+              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+            >
 
-              <div className="bg-white p-6 rounded-2xl border hover:shadow-md">
-                <h3 className="font-semibold text-[#1a0a3b] mb-2">Open Roles</h3>
-                <p className="text-gray-600 text-sm">
-                  RBT & BCBA positions available across multiple locations.
-                </p>
-              </div>
+              {/* Open Roles */}
+              <motion.div variants={fadeUp}>
+                <LeftCard>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "10px" }}>
+                    <span style={{
+                      width: "32px", height: "32px", borderRadius: "8px",
+                      background: dark ? "rgba(124,58,237,0.15)" : "#EDE7F6",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: "16px",
+                    }}>📋</span>
+                    <h3 style={{ fontWeight: 600, color: colors.text, fontSize: "15px", margin: 0 }}>
+                      Open Roles
+                    </h3>
+                  </div>
+                  <p style={{ color: colors.muted, fontSize: "14px", margin: 0, lineHeight: 1.6 }}>
+                    RBT &amp; BCBA positions available across multiple locations.
+                  </p>
+                </LeftCard>
+              </motion.div>
 
-              <div className="bg-white p-6 rounded-2xl border hover:shadow-md">
-                <h3 className="font-semibold mb-2">Benefits</h3>
-                <ul className="text-gray-600 text-sm space-y-1">
-                  <li>✔ Competitive Salary</li>
-                  <li>✔ Flexible Schedule</li>
-                  <li>✔ Career Growth</li>
-                </ul>
-              </div>
+              {/* Benefits */}
+              <motion.div variants={fadeUp}>
+                <LeftCard>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "14px" }}>
+                    <span style={{
+                      width: "32px", height: "32px", borderRadius: "8px",
+                      background: dark ? "rgba(249,115,22,0.12)" : "#FEF3EC",
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: "16px",
+                    }}>✦</span>
+                    <h3 style={{ fontWeight: 600, color: colors.text, fontSize: "15px", margin: 0 }}>
+                      Benefits
+                    </h3>
+                  </div>
+                  {["Competitive Salary", "Flexible Schedule", "Career Growth"].map((b) => (
+                    <div key={b} style={{
+                      display: "flex", alignItems: "center", gap: "10px",
+                      padding: "8px 0",
+                      borderBottom: `1px solid ${colors.border}`,
+                    }}>
+                      <span style={{
+                        width: "6px", height: "6px", borderRadius: "50%",
+                        background: colors.primary, flexShrink: 0,
+                      }} />
+                      <span style={{ color: colors.textSoft, fontSize: "14px" }}>{b}</span>
+                    </div>
+                  ))}
+                </LeftCard>
+              </motion.div>
 
-              <div className="bg-[#1a0a3b] text-white p-6 rounded-2xl">
-                <p className="font-playfair text-lg italic">
-                  “Every child deserves the chance to thrive — and so do you.”
-                </p>
-              </div>
+              {/* Quote card */}
+              <motion.div variants={fadeUp}>
+                <div style={{
+                  background: dark ? "#1a0a3b" : "#1a0a3b",
+                  borderRadius: "20px",
+                  padding: "28px 24px",
+                  position: "relative",
+                  overflow: "hidden",
+                }}>
+                  {/* decorative violet glow */}
+                  <div style={{
+                    position: "absolute", top: "-30px", right: "-30px",
+                    width: "120px", height: "120px", borderRadius: "50%",
+                    background: "rgba(124,58,237,0.25)", filter: "blur(40px)",
+                    pointerEvents: "none",
+                  }} />
+                  <span style={{
+                    fontSize: "40px", color: colors.primary, lineHeight: 1,
+                    display: "block", marginBottom: "8px", opacity: 0.6,
+                  }}>"</span>
+                  <p className="font-playfair" style={{
+                    color: "#fff", fontSize: "17px", fontStyle: "italic",
+                    lineHeight: 1.65, margin: 0,
+                  }}>
+                    Every child deserves the chance to thrive — and so do you.
+                  </p>
+                </div>
+              </motion.div>
 
             </motion.div>
 
-            {/* FORM */}
-            <motion.div className="bg-white border rounded-2xl p-8 shadow-sm">
-
-              <h2 className="font-playfair text-2xl font-bold text-[#1a0a3b] mb-6">
+            {/* ── RIGHT: form ──────────────────────────── */}
+            <motion.div
+              initial={{ opacity: 0, y: 32 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                background: colors.card,
+                border: `1px solid ${colors.border}`,
+                borderRadius: "24px",
+                padding: "36px 32px",
+              }}
+            >
+              <h2 className="font-playfair" style={{
+                fontSize: "26px", fontWeight: 700,
+                color: colors.text, marginBottom: "28px",
+              }}>
                 Apply Now
               </h2>
 
-              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+              <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
 
-                <input name="name" placeholder="Full Name" className={input} onChange={handleChange} required />
-                <input name="email" type="email" placeholder="Email" className={input} onChange={handleChange} required />
-                <input name="phone" placeholder="Phone" className={input} onChange={handleChange} required />
+                {/* Full Name */}
+                <input
+                  name="name" placeholder="Full Name" required
+                  onChange={handleChange}
+                  style={inputBase}
+                  onFocus={e => e.target.style.borderColor = colors.borderFocus}
+                  onBlur={e  => e.target.style.borderColor = colors.border}
+                />
 
-                <select name="position" className={input} onChange={handleChange} required>
+                {/* Email */}
+                <input
+                  name="email" type="email" placeholder="Email" required
+                  onChange={handleChange}
+                  style={inputBase}
+                  onFocus={e => e.target.style.borderColor = colors.borderFocus}
+                  onBlur={e  => e.target.style.borderColor = colors.border}
+                />
+
+                {/* Phone */}
+                <input
+                  name="phone" placeholder="Phone" required
+                  onChange={handleChange}
+                  style={inputBase}
+                  onFocus={e => e.target.style.borderColor = colors.borderFocus}
+                  onBlur={e  => e.target.style.borderColor = colors.border}
+                />
+
+                {/* Position */}
+                <select
+                  name="position" required
+                  onChange={handleChange}
+                  style={{ ...inputBase, cursor: "pointer", appearance: "none",
+                    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23888' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+                    backgroundRepeat: "no-repeat", backgroundPosition: "right 16px center",
+                  }}
+                  onFocus={e => e.target.style.borderColor = colors.borderFocus}
+                  onBlur={e  => e.target.style.borderColor = colors.border}
+                >
                   <option value="">Select Position</option>
                   <option value="RBT">RBT</option>
                   <option value="BCBA">BCBA</option>
                 </select>
 
-                <input name="experience" placeholder="Years of Experience" className={input} onChange={handleChange} />
+                {/* Experience */}
+                <input
+                  name="experience" placeholder="Years of Experience"
+                  onChange={handleChange}
+                  style={inputBase}
+                  onFocus={e => e.target.style.borderColor = colors.borderFocus}
+                  onBlur={e  => e.target.style.borderColor = colors.border}
+                />
 
-                {/* Upload */}
-                <label className="border-2 border-dashed border-[#EDE7F6] p-4 rounded-xl text-center cursor-pointer hover:border-[#7C3AED]">
-                  <input type="file" name="resume" onChange={handleChange} className="hidden" required />
-                  Upload Resume (PDF/DOC)
+                {/* Resume upload */}
+                <label style={{
+                  border: `2px dashed ${colors.border}`,
+                  borderRadius: "12px",
+                  padding: "20px",
+                  textAlign: "center",
+                  cursor: "pointer",
+                  color: colors.muted,
+                  fontSize: "14px",
+                  transition: "border-color 0.2s, color 0.2s",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: "6px",
+                }}
+                  onMouseEnter={e => { e.currentTarget.style.borderColor = colors.primary; e.currentTarget.style.color = colors.primary; }}
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = colors.border;  e.currentTarget.style.color = colors.muted; }}
+                >
+                  <span style={{ fontSize: "22px" }}>📎</span>
+                  <span>
+                    {form.resume ? form.resume.name : "Upload Resume (PDF / DOC)"}
+                  </span>
+                  <input type="file" name="resume" onChange={handleChange} className="hidden" required style={{ display: "none" }} />
                 </label>
 
-                <textarea name="message" rows="4" placeholder="Cover Letter" className={input} onChange={handleChange} />
+                {/* Cover letter */}
+                <textarea
+                  name="message" rows="4" placeholder="Cover Letter (optional)"
+                  onChange={handleChange}
+                  style={{ ...inputBase, resize: "vertical" }}
+                  onFocus={e => e.target.style.borderColor = colors.borderFocus}
+                  onBlur={e  => e.target.style.borderColor = colors.border}
+                />
 
-                {error && <p className="text-red-500 text-sm">{error}</p>}
+                {/* Error */}
+                {error && (
+                  <p style={{ color: "#ef4444", fontSize: "13px", margin: 0 }}>{error}</p>
+                )}
 
+                {/* Submit */}
                 <button
+                  type="submit"
                   disabled={!isValid || loading}
-                  className={`py-3 rounded-full font-semibold transition ${
-                    isValid
-                      ? "bg-[#7C3AED] text-white hover:bg-[#6D28D9]"
-                      : "bg-gray-300"
-                  }`}
+                  style={{
+                    padding: "14px",
+                    borderRadius: "50px",
+                    fontWeight: 600,
+                    fontSize: "15px",
+                    border: "none",
+                    cursor: isValid && !loading ? "pointer" : "not-allowed",
+                    background: isValid ? colors.primary : (dark ? "#2a2a2a" : "#d1d5db"),
+                    color: isValid ? "#fff" : (dark ? "#555" : "#9ca3af"),
+                    transition: "background 0.2s, transform 0.15s",
+                  }}
+                  onMouseEnter={e => { if (isValid) e.currentTarget.style.background = colors.primaryHover; }}
+                  onMouseLeave={e => { if (isValid) e.currentTarget.style.background = colors.primary; }}
+                  onMouseDown={e  => { if (isValid) e.currentTarget.style.transform = "scale(0.98)"; }}
+                  onMouseUp={e    => { e.currentTarget.style.transform = "scale(1)"; }}
                 >
-                  {loading ? "Submitting..." : "Apply Now"}
+                  {loading ? "Submitting…" : "Apply Now →"}
                 </button>
 
               </form>
@@ -176,21 +383,54 @@ const Career = () => {
         </Container>
       </section>
 
-      {/* SUCCESS MODAL */}
+      {/* ── SUCCESS MODAL ─────────────────────────────────────── */}
       {success && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-          <div className="bg-white p-8 rounded-2xl text-center max-w-sm">
-            <h2 className="text-xl font-bold mb-2">Application Submitted 🎉</h2>
-            <p className="text-gray-600 mb-4">
-              We’ll review your profile and contact you soon.
+        <div style={{
+          position: "fixed", inset: 0,
+          background: "rgba(0,0,0,0.55)",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          zIndex: 50,
+        }}>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            style={{
+              background: colors.card,
+              border: `1px solid ${colors.border}`,
+              borderRadius: "24px",
+              padding: "40px 36px",
+              textAlign: "center",
+              maxWidth: "360px",
+              width: "90%",
+            }}
+          >
+            <div style={{ fontSize: "44px", marginBottom: "12px" }}>🎉</div>
+            <h2 style={{ fontSize: "20px", fontWeight: 700, color: colors.text, marginBottom: "10px" }}>
+              Application Submitted!
+            </h2>
+            <p style={{ color: colors.muted, fontSize: "14px", marginBottom: "24px", lineHeight: 1.6 }}>
+              We'll review your profile and contact you soon.
             </p>
             <button
               onClick={() => setSuccess(false)}
-              className="bg-[#7C3AED] text-white px-5 py-2 rounded-full"
+              style={{
+                background: colors.primary,
+                color: "#fff",
+                border: "none",
+                padding: "12px 32px",
+                borderRadius: "50px",
+                fontWeight: 600,
+                fontSize: "14px",
+                cursor: "pointer",
+                transition: "background 0.2s",
+              }}
+              onMouseEnter={e => e.currentTarget.style.background = colors.primaryHover}
+              onMouseLeave={e => e.currentTarget.style.background = colors.primary}
             >
               Close
             </button>
-          </div>
+          </motion.div>
         </div>
       )}
 

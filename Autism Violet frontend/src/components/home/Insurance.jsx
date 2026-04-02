@@ -15,9 +15,9 @@ const InsuranceSection = () => {
   };
 
   return (
-    <section
-      className="py-20 transition-colors duration-300"
-      style={{ background: colors.bg }}
+  <section
+      className="py-20 md:py-28 transition-colors duration-300"
+      style={{ background: dark ? "#0a0a0a" : "#faf9ff" }}
     >
       <div className="max-w-[1200px] mx-auto px-6">
 
