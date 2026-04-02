@@ -1,89 +1,110 @@
-// ScrollToTop.jsx
-// A small, reusable React + Tailwind "Scroll to Top" component.
-// Usage: import ScrollToTop from './ScrollToTop'; place <ScrollToTop /> near the root of your app (e.g. in App.jsx or layout).
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-import React, { useEffect, useState } from 'react';
-
-export default function ScrollToTop({
-  threshold = 250, // number of pixels scrolled before button appears
-  bottom = '4rem', // distance from bottom (can be tailwind classes or CSS value)
-  right = '1.25rem', // distance from right
-  size = 48, // button size in px
-  ariaLabel = 'Scroll to top',
-}) {
+export default function ScrollToTop({ threshold = 250 }) {
   const [visible, setVisible] = useState(false);
+  const [scrollPct, setScrollPct] = useState(0);
 
   useEffect(() => {
     function onScroll() {
-      if (window.scrollY > threshold) setVisible(true);
-      else setVisible(false);
+      const scrolled = window.scrollY;
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setVisible(scrolled > threshold);
+      setScrollPct(total > 0 ? Math.min(scrolled / total, 1) : 0);
     }
-
-    // initial check
     onScroll();
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
   }, [threshold]);
 
-  function handleClick() {
-    // Smooth scroll to top. Works in modern browsers.
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  const handleClick = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
-  // Inline styles for dynamic placement (keeps tailwind optional)
-  const wrapperStyle = {
-    position: 'fixed',
-    right,
-    bottom,
-    zIndex: 9999,
-  };
+  const size = 52;
+  const radius = 22;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDash = circumference * scrollPct;
 
   return (
-    <div style={wrapperStyle} aria-hidden={!visible}>
-      <button
-        onClick={handleClick}
-        aria-label={ariaLabel}
-        title={ariaLabel}
-        className={`flex items-center justify-center rounded-full shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition transform-gpu ${
-          visible ? 'opacity-100 scale-100' : 'opacity-0 scale-75 pointer-events-none'
-        }`}
-        style={{
-          width: size,
-          height: size,
-          background: 'linear-gradient(135deg, #06b6d4, #0ea5a4)',
-          color: 'white',
-        }}
-      >
-        {/* simple chevron-up SVG icon */}
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={2}
-          stroke="currentColor"
-          style={{ width: size * 0.5, height: size * 0.5 }}
-          aria-hidden="true"
-        >
-          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-        </svg>
-      </button>
+    <div
+      style={{ position: "fixed", right: "1.5rem", bottom: "1.5rem", zIndex: 9999 }}
+      aria-hidden={!visible}
+    >
+      <AnimatePresence>
+        {visible && (
+          <motion.button
+            key="scroll-btn"
+            onClick={handleClick}
+            aria-label="Scroll to top"
+            initial={{ opacity: 0, scale: 0.6, y: 16 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.6, y: 16 }}
+            transition={{ type: "spring", stiffness: 340, damping: 26 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.93 }}
+            style={{
+              width: size,
+              height: size,
+              borderRadius: "50%",
+              background: "white",
+              border: "none",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+              boxShadow: "0 4px 24px rgba(124,58,237,0.18)",
+              padding: 0,
+            }}
+          >
+            {/* progress ring */}
+            <svg
+              width={size}
+              height={size}
+              viewBox={`0 0 ${size} ${size}`}
+              style={{ position: "absolute", top: 0, left: 0, transform: "rotate(-90deg)" }}
+            >
+              {/* track */}
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                fill="none"
+                stroke="#EDE7F6"
+                strokeWidth="2.5"
+              />
+              {/* progress */}
+              <circle
+                cx={size / 2}
+                cy={size / 2}
+                r={radius}
+                fill="none"
+                stroke="#7C3AED"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeDasharray={`${strokeDash} ${circumference}`}
+                style={{ transition: "stroke-dasharray 0.1s linear" }}
+              />
+            </svg>
+
+            {/* icon */}
+            <motion.svg
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="#7C3AED"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{ position: "relative", zIndex: 1 }}
+              animate={{ y: [0, -2, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            >
+              <path d="M3 10l5-5 5 5" />
+            </motion.svg>
+          </motion.button>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
-
-/*
-Tips / Notes:
-- Put <ScrollToTop /> at the top level of your app (near App.jsx or your Layout component) so it appears on every page.
-- If you're using Next.js and want to scroll on route change, add:
-
-  import { useRouter } from 'next/router';
-  useEffect(() => {
-    const handleRouteChange = () => window.scrollTo({ top: 0 });
-    router.events.on('routeChangeComplete', handleRouteChange);
-    return () => router.events.off('routeChangeComplete', handleRouteChange);
-  }, []);
-
-- You can customize styling with Tailwind classes by replacing inline styles.
-- Accessibility: button has aria-label and focus styles. The wrapper uses aria-hidden when hidden.
-*/
