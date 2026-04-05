@@ -1,14 +1,28 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
+import { fileURLToPath } from "url";
 import { submitCareerForm } from "../controllers/careerController.js";
 
 const router = express.Router();
 
-// ✅ Storage config (clean file names)
+// ✅ ESM __dirname fix
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ✅ Absolute upload path (IMPORTANT FIX)
+const uploadPath = path.join(__dirname, "../uploads");
+
+// ✅ Ensure folder exists
+if (!fs.existsSync(uploadPath)) {
+  fs.mkdirSync(uploadPath, { recursive: true });
+}
+
+// ✅ Storage config (FIXED)
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "src/uploads/");
+    cb(null, uploadPath); // 🔥 FIX HERE
   },
   filename: (req, file, cb) => {
     const uniqueName =
@@ -34,7 +48,7 @@ const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024, // 5MB limit
+    fileSize: 5 * 1024 * 1024, // 5MB
   },
 });
 
