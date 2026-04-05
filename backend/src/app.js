@@ -10,6 +10,7 @@ const app = express();
 app.use(
   cors({
     origin: [
+      "https://autismviolet.netlify.app",
       "https://autismviolet.com",
       "https://www.autismviolet.com",
       "http://localhost:5173",
