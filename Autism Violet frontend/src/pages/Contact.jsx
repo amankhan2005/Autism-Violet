@@ -4,7 +4,7 @@ import Container from "../components/common/Container";
 import { useTheme } from "../context/ThemeContext";
 import { fadeUp } from "../utils/animations";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL || "https://autism-violet.onrender.com";
 
 const generateCaptcha = () => {
   const a = Math.floor(Math.random() * 10);
@@ -12,34 +12,92 @@ const generateCaptcha = () => {
   return { a, b, answer: a + b };
 };
 
+// ─────────────────────────────────────────────────────────────────────────────
+// FIX: Field is defined OUTSIDE Contact so React never recreates it as a new
+//      component type on re-render. Defining it inside caused inputs to
+//      unmount/remount on every keystroke, losing focus each time.
+// ─────────────────────────────────────────────────────────────────────────────
+const Field = ({ name, type = "text", placeholder, required, rows, form, touched, onChange, onBlur, colors, inputClass, validators }) => {
+  const err = touched[name] ? validators[name]?.(form[name]) || "" : "";
+
+  const fieldStyle = {
+    background: colors.inputBg,
+    border: `1px solid ${err ? "#ef4444" : colors.inputBorder}`,
+    color: colors.inputText,
+    caretColor: colors.primary,
+    resize: "none",
+  };
+
+  const shared = {
+    name,
+    value: form[name],
+    onChange,
+    onBlur,
+    placeholder,
+    required,
+    style: { ...fieldStyle, "--placeholder": colors.placeholder },
+    className: `${inputClass} placeholder:text-[var(--placeholder)]`,
+  };
+
+  return (
+    <div className="flex flex-col gap-1">
+      {rows ? (
+        <textarea {...shared} rows={rows} />
+      ) : (
+        <input {...shared} type={type} />
+      )}
+      <AnimatePresence>
+        {err && (
+          <motion.p
+            key={name + "-err"}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15 }}
+            className="text-[12px] text-red-400 pl-1"
+          >
+            {err}
+          </motion.p>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 const Contact = () => {
   const { dark } = useTheme();
 
   const colors = {
-    bg:           dark ? "#000000" : "#faf9ff",
-    card:         dark ? "#050507" : "#ffffff",
-    cardBorder:   dark ? "#1f1f35" : "#EDE7F6",
-    text:         dark ? "#f0ebff" : "#1a0a3b",
-    muted:        dark ? "#9880c0" : "#5a4e72",
-    inputBg:      dark ? "#0d0d1c" : "#ffffff",
-    inputBorder:  dark ? "#2a2a45" : "#EDE7F6",
-    inputText:    dark ? "#f0ebff" : "#1a0a3b",
-    placeholder:  dark ? "#4a3d6a" : "#b8afd0",
-    promiseBg:    dark ? "#130e2a" : "#1a0a3b",
-    captchaBg:    dark ? "#12122a" : "#f5f3ff",
-    captchaBorder:dark ? "#2a2a50" : "#DDD6FE",
-    errorBg:      dark ? "#2a1010" : "#fef2f2",
-    errorBorder:  dark ? "#5a1a1a" : "#fecaca",
-    successBg:    dark ? "#0f0f1a" : "#ffffff",
-    primary:      "#7C3AED",
+    bg: dark ? "#000000" : "#faf9ff",
+    card: dark ? "#050507" : "#ffffff",
+    cardBorder: dark ? "#1f1f35" : "#EDE7F6",
+    text: dark ? "#f0ebff" : "#1a0a3b",
+    muted: dark ? "#9880c0" : "#5a4e72",
+    inputBg: dark ? "#0d0d1c" : "#ffffff",
+    inputBorder: dark ? "#2a2a45" : "#EDE7F6",
+    inputText: dark ? "#f0ebff" : "#1a0a3b",
+    placeholder: dark ? "#4a3d6a" : "#b8afd0",
+    promiseBg: dark ? "#130e2a" : "#1a0a3b",
+    captchaBg: dark ? "#12122a" : "#f5f3ff",
+    captchaBorder: dark ? "#2a2a50" : "#DDD6FE",
+    errorBg: dark ? "#2a1010" : "#fef2f2",
+    errorBorder: dark ? "#5a1a1a" : "#fecaca",
+    successBg: dark ? "#0f0f1a" : "#ffffff",
+    primary: "#7C3AED",
     primaryHover: "#6D28D9",
-    accent:       "#F97316",
-    shadow:       dark
+    accent: "#F97316",
+    shadow: dark
       ? "0 8px 32px -8px rgba(124,58,237,0.25)"
       : "0 8px 32px -8px rgba(124,58,237,0.10)",
   };
 
   const inputClass = `w-full text-[14px] px-4 py-3 rounded-xl focus:outline-none transition-colors duration-200`;
+
+  const validators = {
+    name: (v) => v.trim().length < 2 ? "Name must be at least 2 characters" : "",
+    email: (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? "" : "Enter a valid email address",
+    message: (v) => v.trim().length < 10 ? "Message must be at least 10 characters" : "",
+  };
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", message: "" });
   const [touched, setTouched] = useState({});
@@ -58,18 +116,8 @@ const Contact = () => {
 
   useEffect(() => { refreshCaptcha(); }, []);
 
-  // ── Validation ──────────────────────────────────────────────
-  const validators = {
-    name:    (v) => v.trim().length < 2 ? "Name must be at least 2 characters" : "",
-    email:   (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v) ? "" : "Enter a valid email address",
-    message: (v) => v.trim().length < 10 ? "Message must be at least 10 characters" : "",
-  };
-
-  const getError = (field) =>
-    touched[field] ? validators[field]?.(form[field]) || "" : "";
-
   const captchaCorrect = parseInt(captchaInput, 10) === captcha.answer;
-  const captchaError   = captchaTouched && !captchaCorrect ? "Incorrect answer, try again" : "";
+  const captchaError = captchaTouched && !captchaCorrect ? "Incorrect answer, try again" : "";
 
   const isFormReady =
     form.name.trim().length >= 2 &&
@@ -77,13 +125,12 @@ const Contact = () => {
     form.message.trim().length >= 10 &&
     captchaCorrect;
 
-  // ── Handlers ────────────────────────────────────────────────
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleBlur = (e) => {
-    setTouched({ ...touched, [e.target.name]: true });
+    setTouched((prev) => ({ ...prev, [e.target.name]: true }));
   };
 
   const handleSubmit = async (e) => {
@@ -111,68 +158,24 @@ const Contact = () => {
     }
   };
 
-  // ── Reusable field renderer ──────────────────────────────────
-  const Field = ({ name, type = "text", placeholder, required, rows }) => {
-    const err = getError(name);
-    const fieldStyle = {
-      background: colors.inputBg,
-      border: `1px solid ${err ? "#ef4444" : colors.inputBorder}`,
-      color: colors.inputText,
-      caretColor: colors.primary,
-    };
-    const placeholderStyle = { "--placeholder": colors.placeholder };
-
-    const shared = {
-      name,
-      value: form[name],
-      onChange: handleChange,
-      onBlur: handleBlur,
-      placeholder,
-      required,
-      style: { ...fieldStyle, ...placeholderStyle, resize: "none" },
-      className: `${inputClass} placeholder:text-[var(--placeholder)]`,
-    };
-
-    return (
-      <div className="flex flex-col gap-1">
-        {rows ? (
-          <textarea {...shared} rows={rows} />
-        ) : (
-          <input {...shared} type={type} />
-        )}
-        <AnimatePresence>
-          {err && (
-            <motion.p
-              key={name + "-err"}
-              initial={{ opacity: 0, y: -4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 0.15 }}
-              className="text-[12px] text-red-400 pl-1"
-            >
-              {err}
-            </motion.p>
-          )}
-        </AnimatePresence>
-      </div>
-    );
-  };
+  // Shared props passed down to Field
+  const fieldProps = { form, touched, onChange: handleChange, onBlur: handleBlur, colors, inputClass, validators };
 
   const contactItems = [
     {
       label: "Location", value: "Massachusetts",
       accent: "#7C3AED", bg: dark ? "#1e1530" : "#EDE7F6",
-      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5S12.5 9.5 12.5 6c0-2.5-2-4.5-4.5-4.5z" stroke="#7C3AED" strokeWidth="1.4"/><circle cx="8" cy="6" r="1.5" stroke="#7C3AED" strokeWidth="1.4"/></svg>,
+      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5S12.5 9.5 12.5 6c0-2.5-2-4.5-4.5-4.5z" stroke="#7C3AED" strokeWidth="1.4" /><circle cx="8" cy="6" r="1.5" stroke="#7C3AED" strokeWidth="1.4" /></svg>,
     },
     {
       label: "Email", value: "info@autismviolet.com",
       accent: "#F97316", bg: dark ? "#2a1a0a" : "#FFF3E8",
-      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="#F97316" strokeWidth="1.4"/><path d="M2 6l6 4 6-4" stroke="#F97316" strokeWidth="1.4" strokeLinecap="round"/></svg>,
+      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="2" y="4" width="12" height="9" rx="2" stroke="#F97316" strokeWidth="1.4" /><path d="M2 6l6 4 6-4" stroke="#F97316" strokeWidth="1.4" strokeLinecap="round" /></svg>,
     },
     {
       label: "Phone", value: "+1 (508) 373-4511",
       accent: "#7C3AED", bg: dark ? "#1e1530" : "#EDE7F6",
-      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2.5h2.5l1 3-1.5 1a8 8 0 003.5 3.5l1-1.5 3 1V13A1.5 1.5 0 0111 14.5C6.25 14.5 1.5 9.75 1.5 5A1.5 1.5 0 013 3.5v-1z" stroke="#7C3AED" strokeWidth="1.4" strokeLinejoin="round"/></svg>,
+      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2.5h2.5l1 3-1.5 1a8 8 0 003.5 3.5l1-1.5 3 1V13A1.5 1.5 0 0111 14.5C6.25 14.5 1.5 9.75 1.5 5A1.5 1.5 0 013 3.5v-1z" stroke="#7C3AED" strokeWidth="1.4" strokeLinejoin="round" /></svg>,
     },
   ];
 
@@ -303,10 +306,10 @@ const Contact = () => {
 
               <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
 
-                <Field name="name"    placeholder="Your name"               required />
-                <Field name="email"   placeholder="Your email"   type="email" required />
-                <Field name="phone"   placeholder="Phone number (optional)"          />
-                <Field name="message" placeholder="Your message"             required rows={4} />
+                <Field name="name" placeholder="Your name" required {...fieldProps} />
+                <Field name="email" placeholder="Your email" type="email" required {...fieldProps} />
+                <Field name="phone" placeholder="Phone number (optional)"                   {...fieldProps} />
+                <Field name="message" placeholder="Your message" required rows={4} {...fieldProps} />
 
                 {/* ── CAPTCHA ──────────────────────────────────── */}
                 <div
@@ -327,8 +330,8 @@ const Contact = () => {
                       style={{ color: colors.primary }}
                     >
                       <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M13.5 2.5A7 7 0 1 0 14 8" strokeLinecap="round"/>
-                        <path d="M14 2.5V6h-3.5" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M13.5 2.5A7 7 0 1 0 14 8" strokeLinecap="round" />
+                        <path d="M14 2.5V6h-3.5" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                       New question
                     </button>
@@ -375,13 +378,13 @@ const Contact = () => {
                         >
                           {captchaCorrect ? (
                             <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-                              <circle cx="10" cy="10" r="9" fill="#22c55e" opacity="0.15"/>
-                              <path d="M5.5 10.5l3 3 6-6" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                              <circle cx="10" cy="10" r="9" fill="#22c55e" opacity="0.15" />
+                              <path d="M5.5 10.5l3 3 6-6" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                           ) : (
                             <svg className="w-5 h-5" viewBox="0 0 20 20" fill="none">
-                              <circle cx="10" cy="10" r="9" fill="#ef4444" opacity="0.15"/>
-                              <path d="M7 7l6 6M13 7l-6 6" stroke="#ef4444" strokeWidth="1.8" strokeLinecap="round"/>
+                              <circle cx="10" cy="10" r="9" fill="#ef4444" opacity="0.15" />
+                              <path d="M7 7l6 6M13 7l-6 6" stroke="#ef4444" strokeWidth="1.8" strokeLinecap="round" />
                             </svg>
                           )}
                         </motion.span>
@@ -438,7 +441,7 @@ const Contact = () => {
                   {loading ? (
                     <>
                       <svg className="w-4 h-4 animate-spin" viewBox="0 0 16 16" fill="none">
-                        <circle cx="8" cy="8" r="6" stroke="white" strokeWidth="2" strokeDasharray="28" strokeDashoffset="10"/>
+                        <circle cx="8" cy="8" r="6" stroke="white" strokeWidth="2" strokeDasharray="28" strokeDashoffset="10" />
                       </svg>
                       Sending…
                     </>
@@ -446,7 +449,7 @@ const Contact = () => {
                     <>
                       Send Message
                       <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
-                        <path d="M3 8h10M9 4l4 4-4 4"/>
+                        <path d="M3 8h10M9 4l4 4-4 4" />
                       </svg>
                     </>
                   )}
@@ -504,7 +507,7 @@ const Contact = () => {
                 style={{ background: dark ? "#1e1530" : "#EDE7F6" }}
               >
                 <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                  <path d="M4 11l5 5 9-9" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M4 11l5 5 9-9" stroke="#7C3AED" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </div>
 
@@ -525,7 +528,7 @@ const Contact = () => {
               >
                 Close
                 <svg className="w-3.5 h-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M3 8h10M9 4l4 4-4 4"/>
+                  <path d="M3 8h10M9 4l4 4-4 4" />
                 </svg>
               </button>
             </motion.div>
