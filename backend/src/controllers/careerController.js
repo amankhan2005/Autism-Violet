@@ -5,10 +5,18 @@ import {
   userTemplate,
 } from "../utils/emailTemplates.js";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// ✅ SAFE INIT (fix)
+const getResend = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("❌ RESEND_API_KEY missing in env");
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+};
 
 export const submitCareerForm = async (req, res) => {
   try {
+    const resend = getResend(); // ✅ FIXED
+
     const {
       name,
       email,
@@ -60,7 +68,7 @@ export const submitCareerForm = async (req, res) => {
     res.json({ message: "Application submitted successfully" });
 
   } catch (err) {
-    console.error(err);
+    console.error("❌ Controller Error:", err.message);
     res.status(500).json({ message: "Server error" });
   }
 };

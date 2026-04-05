@@ -1,6 +1,12 @@
- import { Resend } from "resend";
+import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// ✅ SAFE INIT (fix)
+const getResend = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("❌ RESEND_API_KEY missing in env");
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+};
 
 // ✅ Updated branding
 const FROM_EMAIL =
@@ -15,6 +21,8 @@ const gradient = "linear-gradient(135deg,#6B3FA0,#B88AD9,#4B2A7A)";
 // 🔥 ADMIN EMAIL
 export const sendAdminEmail = async ({ name, email, phone, message }) => {
   try {
+    const resend = getResend(); // ✅ FIXED
+
     if (!ADMIN_EMAIL) throw new Error("ADMIN_EMAIL not defined");
 
     return await resend.emails.send({
@@ -84,11 +92,11 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
   }
 };
 
-
-
 // 🔥 USER AUTO REPLY
 export const sendUserEmail = async ({ name, email }) => {
   try {
+    const resend = getResend(); // ✅ FIXED
+
     return await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
