@@ -163,7 +163,7 @@ const Contact = () => {
 
   const contactItems = [
     {
-      label: "Location", value: "Massachusetts",
+      label: "Location", value: "Serving in entire Massachusetts",
       accent: "#7C3AED", bg: dark ? "#1e1530" : "#EDE7F6",
       icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1.5C5.5 1.5 3.5 3.5 3.5 6c0 3.5 4.5 8.5 4.5 8.5S12.5 9.5 12.5 6c0-2.5-2-4.5-4.5-4.5z" stroke="#7C3AED" strokeWidth="1.4" /><circle cx="8" cy="6" r="1.5" stroke="#7C3AED" strokeWidth="1.4" /></svg>,
     },
@@ -176,6 +176,11 @@ const Contact = () => {
       label: "Phone", value: "+1 (508) 373-4511",
       accent: "#7C3AED", bg: dark ? "#1e1530" : "#EDE7F6",
       icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 2.5h2.5l1 3-1.5 1a8 8 0 003.5 3.5l1-1.5 3 1V13A1.5 1.5 0 0111 14.5C6.25 14.5 1.5 9.75 1.5 5A1.5 1.5 0 013 3.5v-1z" stroke="#7C3AED" strokeWidth="1.4" strokeLinejoin="round" /></svg>,
+    },
+    {
+      label: "Fax", value: "+1 5082589039",
+      accent: "#7C3AED", bg: dark ? "#1e1530" : "#EDE7F6",
+      icon: <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 2h8a1.5 1.5 0 011.5 1.5v9A1.5 1.5 0 0112 14H4a1.5 1.5 0 01-1.5-1.5v-9A1.5 1.5 0 014 2z" stroke="#7C3AED" strokeWidth="1.4" /><path d="M5.5 5.5h5M5.5 8h5M5.5 10.5h3" stroke="#7C3AED" strokeWidth="1.2" strokeLinecap="round" /><path d="M12 9.5v3a.5.5 0 01-.5.5h-1.5" stroke="#7C3AED" strokeWidth="1.2" strokeLinecap="round" /></svg>,
     },
   ];
 

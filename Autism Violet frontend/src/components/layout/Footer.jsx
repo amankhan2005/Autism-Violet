@@ -17,7 +17,7 @@ const navLinks = [
 const contactItems = [
   {
     label: "Location",
-    value: "Massachusetts, USA",
+    value: "Serving in entire Massachusetts",
     icon: (
       <svg className="w-3.5 h-3.5 stroke-[#7C3AED]" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
         <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -40,6 +40,17 @@ const contactItems = [
     icon: (
       <svg className="w-3.5 h-3.5 stroke-[#7C3AED]" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
         <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+      </svg>
+    ),
+  },
+  {
+    label: "Fax",
+    value: "+1 5082589039",
+    icon: (
+      <svg className="w-3.5 h-3.5 stroke-[#7C3AED]" fill="none" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+        <path d="M6 3h12a2 2 0 012 2v14a2 2 0 01-2 2H6a2 2 0 01-2-2V5a2 2 0 012-2z" />
+        <path d="M8 7h8M8 11h8M8 15h4" />
+        <path d="M17 13v4a1 1 0 01-1 1h-2" />
       </svg>
     ),
   },
@@ -154,6 +165,7 @@ const Footer = () => {
                   if (item.label === "Email") href = `mailto:${item.value}`;
                   else if (item.label === "Phone") href = `tel:${item.value}`;
                   else if (item.label === "Location") href = "https://www.google.com/maps?q=Massachusetts";
+                  else if (item.label === "Fax") href = `tel:${item.value}`;
 
                   return (
                     <a
