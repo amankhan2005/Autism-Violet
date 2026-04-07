@@ -7,8 +7,8 @@ dns.setDefaultResultOrder("ipv4first");
 // ✅ SINGLE TRANSPORTER (optimized)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  port: 465,        // ✅ CHANGE
+  secure: true,     // ✅ MUST
 
   family: 4,
 

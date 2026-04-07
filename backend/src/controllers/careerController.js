@@ -6,14 +6,14 @@ import {
   userTemplate,
 } from "../utils/emailTemplates.js";
 
-// 🔥 FORCE IPv4 globally
+// 🔥 FORCE IPv4 globally (fix ENETUNREACH)
 dns.setDefaultResultOrder("ipv4first");
 
-// ✅ SINGLE TRANSPORTER (BEST PRACTICE)
+// ✅ SINGLE TRANSPORTER (FINAL + STABLE)
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  port: 465,        // ✅ FIXED
+  secure: true,     // ✅ MUST for 465
 
   family: 4,
 
@@ -38,6 +38,7 @@ export const submitCareerForm = async (req, res) => {
       message,
     } = req.body;
 
+    // ✅ Validation
     if (!name || !email || !phone || !position || !req.file) {
       return res.status(400).json({
         message: "All required fields are required",
@@ -49,7 +50,7 @@ export const submitCareerForm = async (req, res) => {
     // 🔥 EMAILS (NON-BLOCKING)
     setImmediate(async () => {
       try {
-        // ✅ ADMIN EMAIL
+        // ✅ ADMIN EMAIL (with attachment)
         await transporter.sendMail({
           from: process.env.EMAIL_FROM,
           to: process.env.ADMIN_EMAIL,
@@ -85,19 +86,20 @@ export const submitCareerForm = async (req, res) => {
       }
     });
 
-    // 🧹 Delete file safely
+    // 🧹 Delete file safely (after small delay)
     setTimeout(() => {
       if (req.file?.path && fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
     }, 5000);
 
-    // ✅ Instant response
+    // ✅ Instant response (FAST ⚡)
     res.json({ message: "Application submitted successfully" });
 
   } catch (err) {
     console.error("❌ Controller Error:", err);
 
+    // ❗ Cleanup on error
     if (req.file?.path && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
