@@ -5,7 +5,7 @@ import {
   userTemplate,
 } from "../utils/emailTemplates.js";
 
-// ✅ SMTP Transport
+// ✅ SMTP Transport (FIXED)
 const getTransporter = () => {
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
     throw new Error("❌ SMTP credentials missing in env");
@@ -15,6 +15,13 @@ const getTransporter = () => {
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT) || 587,
     secure: false,
+
+    // 🔥 IMPORTANT FIXES
+    family: 4,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
+
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
@@ -43,44 +50,59 @@ export const submitCareerForm = async (req, res) => {
 
     const fileBuffer = fs.readFileSync(req.file.path);
 
-    // ✅ ADMIN EMAIL (with attachment)
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to: process.env.ADMIN_EMAIL,
-      subject: `New Application - ${position}`,
-      html: adminTemplate({
-        name,
-        email,
-        phone,
-        position,
-        experience,
-        message,
-      }),
-      attachments: [
-        {
-          filename: req.file.originalname,
-          content: fileBuffer,
-        },
-      ],
+    // 🔥 EMAILS (NON-BLOCKING)
+    setImmediate(async () => {
+      try {
+        // ✅ ADMIN EMAIL
+        await transporter.sendMail({
+          from: process.env.EMAIL_FROM,
+          to: process.env.ADMIN_EMAIL,
+          subject: `New Application - ${position}`,
+          html: adminTemplate({
+            name,
+            email,
+            phone,
+            position,
+            experience,
+            message,
+          }),
+          attachments: [
+            {
+              filename: req.file.originalname,
+              content: fileBuffer,
+            },
+          ],
+        });
+
+        // ✅ USER EMAIL
+        await transporter.sendMail({
+          from: process.env.EMAIL_FROM,
+          to: email,
+          subject: "Application Received – Autism Violet",
+          html: userTemplate({ name, position }),
+        });
+
+        console.log("✅ Career emails sent");
+
+      } catch (emailErr) {
+        console.error("❌ Career Email Error:", emailErr);
+      }
     });
 
-    // ✅ USER EMAIL
-    await transporter.sendMail({
-      from: process.env.EMAIL_FROM,
-      to: email,
-      subject: "Application Received – Autism Violet",
-      html: userTemplate({ name, position }),
-    });
+    // 🧹 Delete file AFTER sending (slight delay safe)
+    setTimeout(() => {
+      if (req.file?.path && fs.existsSync(req.file.path)) {
+        fs.unlinkSync(req.file.path);
+      }
+    }, 5000);
 
-    // 🧹 Delete file
-    fs.unlinkSync(req.file.path);
-
+    // ✅ Instant response (no buffering)
     res.json({ message: "Application submitted successfully" });
 
   } catch (err) {
-    console.error("❌ Controller Error:", err.message);
+    console.error("❌ Controller Error:", err);
 
-    // ❗ file cleanup even on error
+    // ❗ Cleanup on error
     if (req.file?.path && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }

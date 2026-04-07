@@ -1,6 +1,6 @@
 import nodemailer from "nodemailer";
 
-// ✅ SMTP Transport (safe init)
+// ✅ SMTP Transport (FIXED + STABLE)
 const getTransporter = () => {
   if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
     throw new Error("❌ SMTP credentials missing in env");
@@ -9,7 +9,14 @@ const getTransporter = () => {
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST,
     port: Number(process.env.SMTP_PORT) || 587,
-    secure: false, // TLS
+    secure: false,
+
+    // 🔥 FIXES
+    family: 4,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 10000,
+
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
@@ -17,15 +24,16 @@ const getTransporter = () => {
   });
 };
 
-// ✅ Branding (same as before)
+// ✅ Branding
 const FROM_EMAIL =
   process.env.EMAIL_FROM || "Autism Violet <info@autismviolet.com>";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const COMPANY_NAME = process.env.COMPANY_NAME || "Autism Violet";
 
-// 🎨 Gradient (same)
+// 🎨 Gradient
 const gradient = "linear-gradient(135deg,#6B3FA0,#B88AD9,#4B2A7A)";
+
 
 // 🔥 ADMIN EMAIL
 export const sendAdminEmail = async ({ name, email, phone, message }) => {
@@ -34,14 +42,13 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
 
     if (!ADMIN_EMAIL) throw new Error("ADMIN_EMAIL not defined");
 
-    return await transporter.sendMail({
+    await transporter.sendMail({
       from: FROM_EMAIL,
       to: ADMIN_EMAIL,
       subject: `New Client Inquiry - ${COMPANY_NAME}`,
 
       html: `
 <div style="font-family:Arial,sans-serif;background:#F5F3F8;padding:30px;">
-
   <div style="max-width:620px;margin:auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.08);">
 
     <div style="background:${gradient};padding:25px;text-align:center;color:#fff;">
@@ -68,12 +75,15 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
           <div style="display:flex;padding:12px;background:${
             i % 2 === 0 ? "#fff" : "#F9F7FC"
           };">
+
             <div style="width:120px;font-weight:600;color:#4B2A7A;">
               ${label}
             </div>
+
             <div style="flex:1;color:#555;">
               ${value}
             </div>
+
           </div>
         `
           )
@@ -90,16 +100,17 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
 `,
     });
   } catch (error) {
-    console.error("❌ Admin Email Error:", error.message);
+    console.error("❌ Admin Email Error:", error);
   }
 };
+
 
 // 🔥 USER AUTO REPLY
 export const sendUserEmail = async ({ name, email }) => {
   try {
     const transporter = getTransporter();
 
-    return await transporter.sendMail({
+    await transporter.sendMail({
       from: FROM_EMAIL,
       to: email,
       subject: `We’ve Received Your Request - ${COMPANY_NAME}`,
@@ -117,6 +128,7 @@ export const sendUserEmail = async ({ name, email }) => {
     </div>
 
     <div style="padding:28px;">
+
       <h3 style="margin-top:0;color:#4B2A7A;">Hello ${name}, 👋</h3>
 
       <p style="color:#555;line-height:1.6;">
@@ -138,6 +150,7 @@ export const sendUserEmail = async ({ name, email }) => {
       <p style="font-size:13px;color:#777;text-align:center;">
         If urgent, feel free to reply directly to this email.
       </p>
+
     </div>
 
     <div style="padding:18px;text-align:center;font-size:12px;color:#777;background:#F5F3F8;">
@@ -150,6 +163,6 @@ export const sendUserEmail = async ({ name, email }) => {
 `,
     });
   } catch (error) {
-    console.error("❌ User Email Error:", error.message);
+    console.error("❌ User Email Error:", error);
   }
 };
