@@ -21,23 +21,23 @@ export const submitContact = async (req, res, next) => {
       message
     });
 
-    // 🔥 EMAIL (non-blocking behavior)
-    try {
-      await sendAdminEmail({ name, email, phone, message });
+    // 🔥 EMAIL (NON-BLOCKING 🔥🔥)
+    setImmediate(() => {
+      try {
+        sendAdminEmail({ name, email, phone, message });
 
-      const SEND_USER_EMAIL = true;
-      if (SEND_USER_EMAIL) {
-        await sendUserEmail({ name, email });
+        const SEND_USER_EMAIL = true;
+        if (SEND_USER_EMAIL) {
+          sendUserEmail({ name, email });
+        }
+
+        console.log("✅ Emails triggered");
+      } catch (emailError) {
+        console.error("❌ EMAIL ERROR:", emailError);
       }
+    });
 
-      console.log("✅ Emails sent successfully");
-
-    } catch (emailError) {
-      console.error("❌ EMAIL ERROR:", emailError.message);
-      // ❗ fail nahi karenge
-    }
-
-    // ✅ Always success response
+    // ✅ Instant response (fast ⚡)
     return res.status(201).json({
       success: true,
       message: "Your message has been sent successfully",

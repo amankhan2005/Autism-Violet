@@ -1,38 +1,34 @@
 import fs from "fs";
 import nodemailer from "nodemailer";
+import dns from "dns";
 import {
   adminTemplate,
   userTemplate,
 } from "../utils/emailTemplates.js";
 
-// ✅ SMTP Transport (FIXED)
-const getTransporter = () => {
-  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
-    throw new Error("❌ SMTP credentials missing in env");
-  }
+// 🔥 FORCE IPv4 globally
+dns.setDefaultResultOrder("ipv4first");
 
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: false,
+// ✅ SINGLE TRANSPORTER (BEST PRACTICE)
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",
+  port: 587,
+  secure: false,
 
-    // 🔥 IMPORTANT FIXES
-    family: 4,
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 10000,
+  family: 4,
 
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS,
-    },
-  });
-};
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
+
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
+  },
+});
 
 export const submitCareerForm = async (req, res) => {
   try {
-    const transporter = getTransporter();
-
     const {
       name,
       email,
@@ -89,20 +85,19 @@ export const submitCareerForm = async (req, res) => {
       }
     });
 
-    // 🧹 Delete file AFTER sending (slight delay safe)
+    // 🧹 Delete file safely
     setTimeout(() => {
       if (req.file?.path && fs.existsSync(req.file.path)) {
         fs.unlinkSync(req.file.path);
       }
     }, 5000);
 
-    // ✅ Instant response (no buffering)
+    // ✅ Instant response
     res.json({ message: "Application submitted successfully" });
 
   } catch (err) {
     console.error("❌ Controller Error:", err);
 
-    // ❗ Cleanup on error
     if (req.file?.path && fs.existsSync(req.file.path)) {
       fs.unlinkSync(req.file.path);
     }
