@@ -1,21 +1,30 @@
 import fs from "fs";
-import { Resend } from "resend";
+import nodemailer from "nodemailer";
 import {
   adminTemplate,
   userTemplate,
 } from "../utils/emailTemplates.js";
 
-// ✅ SAFE INIT (fix)
-const getResend = () => {
-  if (!process.env.RESEND_API_KEY) {
-    throw new Error("❌ RESEND_API_KEY missing in env");
+// ✅ SMTP Transport
+const getTransporter = () => {
+  if (!process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    throw new Error("❌ SMTP credentials missing in env");
   }
-  return new Resend(process.env.RESEND_API_KEY);
+
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT) || 587,
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
 };
 
 export const submitCareerForm = async (req, res) => {
   try {
-    const resend = getResend(); // ✅ FIXED
+    const transporter = getTransporter();
 
     const {
       name,
@@ -34,10 +43,10 @@ export const submitCareerForm = async (req, res) => {
 
     const fileBuffer = fs.readFileSync(req.file.path);
 
-    // ✅ ADMIN EMAIL
-    await resend.emails.send({
+    // ✅ ADMIN EMAIL (with attachment)
+    await transporter.sendMail({
       from: process.env.EMAIL_FROM,
-      to: [process.env.ADMIN_EMAIL],
+      to: process.env.ADMIN_EMAIL,
       subject: `New Application - ${position}`,
       html: adminTemplate({
         name,
@@ -56,19 +65,26 @@ export const submitCareerForm = async (req, res) => {
     });
 
     // ✅ USER EMAIL
-    await resend.emails.send({
+    await transporter.sendMail({
       from: process.env.EMAIL_FROM,
-      to: [email],
+      to: email,
       subject: "Application Received – Autism Violet",
       html: userTemplate({ name, position }),
     });
 
+    // 🧹 Delete file
     fs.unlinkSync(req.file.path);
 
     res.json({ message: "Application submitted successfully" });
 
   } catch (err) {
     console.error("❌ Controller Error:", err.message);
+
+    // ❗ file cleanup even on error
+    if (req.file?.path && fs.existsSync(req.file.path)) {
+      fs.unlinkSync(req.file.path);
+    }
+
     res.status(500).json({ message: "Server error" });
   }
 };

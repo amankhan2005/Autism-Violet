@@ -1,4 +1,4 @@
- import Contact from "../models/Contact.js";
+import Contact from "../models/Contact.js";
 import { sendAdminEmail, sendUserEmail } from "../services/emailService.js";
 
 export const submitContact = async (req, res, next) => {
@@ -21,14 +21,11 @@ export const submitContact = async (req, res, next) => {
       message
     });
 
-    // 🔥 EMAIL SECTION (FIXED)
+    // 🔥 EMAIL (non-blocking behavior)
     try {
-      // 👉 Admin email (must)
       await sendAdminEmail({ name, email, phone, message });
 
-      // 👉 User email (optional)
       const SEND_USER_EMAIL = true;
-
       if (SEND_USER_EMAIL) {
         await sendUserEmail({ name, email });
       }
@@ -36,18 +33,11 @@ export const submitContact = async (req, res, next) => {
       console.log("✅ Emails sent successfully");
 
     } catch (emailError) {
-      console.error("❌ EMAIL ERROR:", emailError);
-
-      // 👉 Optional: still return success (form saved)
-      // OR you can fail response (your choice)
-
-      return res.status(500).json({
-        success: false,
-        message: "Message saved but email failed. Please try again later."
-      });
+      console.error("❌ EMAIL ERROR:", emailError.message);
+      // ❗ fail nahi karenge
     }
 
-    // ✅ Final response
+    // ✅ Always success response
     return res.status(201).json({
       success: true,
       message: "Your message has been sent successfully",
