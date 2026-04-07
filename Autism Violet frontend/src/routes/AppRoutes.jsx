@@ -7,7 +7,7 @@ import Services from "../pages/Services";
 import Contact from "../pages/Contact";
 import About from "../pages/About";
 import FAQ from "../pages/FAQ";
-import Kenya from "../pages/Kenya";
+// import Kenya from "../pages/Kenya";
 import PrivacyPolicy from "../pages/PrivacyPolicy";
 import Career from "../pages/Career";
 import GettingStarted from "../pages/GettingStarted";
@@ -60,7 +60,7 @@ const AppRoutes = () => {
           <Route path="/services" element={<PageWrapper><Services /></PageWrapper>} />
           <Route path="/faq" element={<PageWrapper><FAQ /></PageWrapper>} />
           <Route path="/contact-us" element={<PageWrapper><Contact /></PageWrapper>} />
-          <Route path="/kenya" element={<PageWrapper><Kenya /></PageWrapper>} />
+          {/* <Route path="/kenya" element={<PageWrapper><Kenya /></PageWrapper>} /> */}
           <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
           <Route path="/career" element={<PageWrapper><Career /></PageWrapper>} />
           <Route path="/getting-started" element={<PageWrapper><GettingStarted /></PageWrapper>} />
