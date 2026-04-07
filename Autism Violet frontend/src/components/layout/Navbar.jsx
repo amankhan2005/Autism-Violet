@@ -16,9 +16,7 @@ const NAV_LINKS = [
   { name: "Home",     path: "/" },
   { name: "About Us", path: "/about-us" },
   { name: "Services", path: "/services" },
-  { name: "FAQ",      path: "/faq" },
-   { name: "Career",   path: "/career" },
-
+  { name: "Career",   path: "/career" },
 ];
 
 /* ─── Icons ──────────────────────────────────────────────────────── */
@@ -71,12 +69,7 @@ const HamburgerIcon = ({ open }) => (
   </svg>
 );
 
-/* ─── ThemeToggle component ──────────────────────────────────────────
-   Props:
-     dark      — boolean
-     onToggle  — () => void
-     compact   — boolean  icon-only variant for tight spaces
-────────────────────────────────────────────────────────────────────── */
+/* ─── ThemeToggle component ────────────────────────────────────────── */
 const ThemeToggle = ({ dark, onToggle, compact = false }) => {
   const [hovered, setHovered] = useState(false);
 
@@ -105,7 +98,6 @@ const ThemeToggle = ({ dark, onToggle, compact = false }) => {
     );
   }
 
-  /* Pill toggle (default) */
   return (
     <button
       onClick={onToggle}
@@ -125,12 +117,10 @@ const ThemeToggle = ({ dark, onToggle, compact = false }) => {
         transition: "background .2s",
       }}
     >
-      {/* Icon */}
       <span style={{ display: "flex", alignItems: "center", width: 18, height: 18 }}>
         {dark ? <MoonIcon color="#c4b5d8"/> : <SunIcon color={B.primary}/>}
       </span>
 
-      {/* Label */}
       <span style={{
         fontSize: 12, fontWeight: 500, whiteSpace: "nowrap",
         color: dark ? "#c4b5d8" : B.primary,
@@ -139,7 +129,6 @@ const ThemeToggle = ({ dark, onToggle, compact = false }) => {
         {dark ? "Light mode" : "Dark mode"}
       </span>
 
-      {/* Track */}
       <span style={{
         position: "relative",
         width: 42, height: 24,
@@ -149,7 +138,6 @@ const ThemeToggle = ({ dark, onToggle, compact = false }) => {
         background: dark ? B.gradient : "#e0d9f0",
         transition: "background .35s",
       }}>
-        {/* Thumb with spring bounce */}
         <span style={{
           position: "absolute",
           top: 3, left: 3,
@@ -276,7 +264,6 @@ const Navbar = () => {
                 style={{ color: active ? B.primary : dark ? "#c4b5d8" : "#374151" }}
               >
                 {link.name}
-                {/* Animated underline */}
                 <span
                   aria-hidden="true"
                   style={{
@@ -297,10 +284,12 @@ const Navbar = () => {
         {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-3">
 
-          {/* ✨ Attractive theme toggle */}
+          {/* Theme toggle */}
           <ThemeToggle dark={dark} onToggle={toggleTheme} />
 
-          {/* Call Now */}
+
+
+   {/* Call Now */}
           <a
             href="tel:+15083734511"
             className="flex items-center gap-1.5 px-4 py-2 rounded-full
@@ -314,6 +303,22 @@ const Navbar = () => {
             <PhoneIcon />
             <span>Call Now</span>
           </a>
+
+          {/* Getting Started */}
+          <Link
+            to="/getting-started"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-full
+              text-sm font-medium transition-all duration-200 hover:opacity-90
+              hover:scale-[1.03] active:scale-[0.97] text-white"
+            style={{
+              background: "linear-gradient(135deg, #FF6B00, #FF9A3C)",
+              boxShadow:  "0 2px 12px rgba(255,107,0,.35)",
+            }}
+          >
+            Getting Started
+          </Link>
+
+        
 
           {/* Primary CTA */}
           <Link
@@ -400,7 +405,9 @@ const Navbar = () => {
             className="flex flex-col gap-3 mt-4 pt-4"
             style={{ borderTop: `1px solid ${dark ? "#1f1f1f" : "#ede9f6"}` }}
           >
-            <a
+             
+             {/* Call Now */}
+              <a
               href="tel:+15083734511"
               className="flex items-center justify-center gap-2 py-2.5
                 rounded-full text-sm font-medium transition-all duration-200"
@@ -413,6 +420,22 @@ const Navbar = () => {
               <PhoneIcon />
               <span>Call Now</span>
             </a>
+
+
+            {/* Getting Started */}
+            <Link
+              to="/getting-started"
+              className="text-center py-2.5 rounded-full text-sm font-medium
+                text-white transition-all duration-200 hover:opacity-90"
+              style={{
+                background: "linear-gradient(135deg, #FF6B00, #FF9A3C)",
+                boxShadow:  "0 2px 12px rgba(255,107,0,.35)",
+              }}
+            >
+              Getting Started
+            </Link>
+
+            
 
             <Link
               to="/contact-us"

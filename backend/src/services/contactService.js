@@ -8,19 +8,14 @@ export const createContactService = async (data) => {
     throw new Error("Required fields missing");
   }
 
-  // ✅ Save in DB first (important)
+  // Save in DB
   const contact = await Contact.create(data);
 
-  // ✅ Send emails (fail-safe)
-  try {
-    await Promise.all([
-      sendAdminEmail({ name, email, phone, message }),
-      sendUserEmail({ name, email })
-    ]);
-  } catch (error) {
-    console.error("⚠️ Email sending failed:", error.message);
-    // ❗ API fail nahi karega
-  }
+  // Send Emails
+  await Promise.all([
+    sendAdminEmail({ name, email, phone, message }),
+    sendUserEmail({ name, email })
+  ]);
 
   return contact;
 };

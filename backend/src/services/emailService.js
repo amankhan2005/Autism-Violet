@@ -1,52 +1,41 @@
-import nodemailer from "nodemailer";
-import dns from "dns";
+import { Resend } from "resend";
 
-// 🔥 FORCE IPv4 (fix ENETUNREACH)
-dns.setDefaultResultOrder("ipv4first");
+// ✅ SAFE INIT (fix)
+const getResend = () => {
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("❌ RESEND_API_KEY missing in env");
+  }
+  return new Resend(process.env.RESEND_API_KEY);
+};
 
-// ✅ SINGLE TRANSPORTER (optimized)
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,        // ✅ CHANGE
-  secure: true,     // ✅ MUST
-
-  family: 4,
-
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 10000,
-
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
-
-// ✅ Branding
+// ✅ Updated branding
 const FROM_EMAIL =
-  process.env.EMAIL_FROM || "Autism Violet <info@autismviolet.com>";
+  process.env.EMAIL_FROM || "Autism Violet <onboarding@resend.dev>";
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const COMPANY_NAME = process.env.COMPANY_NAME || "Autism Violet";
 
-// 🎨 Gradient
+// 🎨 Purple gradient (logo based)
 const gradient = "linear-gradient(135deg,#6B3FA0,#B88AD9,#4B2A7A)";
-
 
 // 🔥 ADMIN EMAIL
 export const sendAdminEmail = async ({ name, email, phone, message }) => {
   try {
+    const resend = getResend(); // ✅ FIXED
+
     if (!ADMIN_EMAIL) throw new Error("ADMIN_EMAIL not defined");
 
-    await transporter.sendMail({
+    return await resend.emails.send({
       from: FROM_EMAIL,
       to: ADMIN_EMAIL,
       subject: `New Client Inquiry - ${COMPANY_NAME}`,
 
       html: `
 <div style="font-family:Arial,sans-serif;background:#F5F3F8;padding:30px;">
+
   <div style="max-width:620px;margin:auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.08);">
 
+    <!-- HEADER -->
     <div style="background:${gradient};padding:25px;text-align:center;color:#fff;">
       <h2 style="margin:0;font-size:22px;">📩 New Inquiry</h2>
       <p style="margin:5px 0 0;font-size:13px;opacity:0.9;">
@@ -54,12 +43,15 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
       </p>
     </div>
 
+    <!-- BODY -->
     <div style="padding:25px;">
+
       <p style="color:#555;margin-bottom:20px;">
         A new client has submitted a contact request:
       </p>
 
       <div style="border-radius:12px;overflow:hidden;border:1px solid #eee;">
+
         ${[
           ["Name", name],
           ["Email", email],
@@ -81,9 +73,12 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
         `
           )
           .join("")}
+
       </div>
+
     </div>
 
+    <!-- FOOTER -->
     <div style="padding:15px;text-align:center;font-size:12px;color:#777;background:#F5F3F8;">
       © ${new Date().getFullYear()} ${COMPANY_NAME}
     </div>
@@ -92,25 +87,27 @@ export const sendAdminEmail = async ({ name, email, phone, message }) => {
 </div>
 `,
     });
-
   } catch (error) {
-    console.error("❌ Admin Email Error:", error);
+    console.error("❌ Admin Email Error:", error.message);
   }
 };
-
 
 // 🔥 USER AUTO REPLY
 export const sendUserEmail = async ({ name, email }) => {
   try {
-    await transporter.sendMail({
+    const resend = getResend(); // ✅ FIXED
+
+    return await resend.emails.send({
       from: FROM_EMAIL,
       to: email,
       subject: `We’ve Received Your Request - ${COMPANY_NAME}`,
 
       html: `
 <div style="font-family:Arial,sans-serif;background:#F5F3F8;padding:30px;">
+
   <div style="max-width:620px;margin:auto;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,0.08);">
 
+    <!-- HEADER -->
     <div style="background:${gradient};padding:30px;text-align:center;color:#fff;">
       <h2 style="margin:0;font-size:24px;">${COMPANY_NAME}</h2>
       <p style="margin:6px 0 0;font-size:14px;opacity:0.9;">
@@ -118,7 +115,9 @@ export const sendUserEmail = async ({ name, email }) => {
       </p>
     </div>
 
+    <!-- BODY -->
     <div style="padding:28px;">
+
       <h3 style="margin-top:0;color:#4B2A7A;">Hello ${name}, 👋</h3>
 
       <p style="color:#555;line-height:1.6;">
@@ -130,9 +129,10 @@ export const sendUserEmail = async ({ name, email }) => {
         ⏱ Expected response time: <strong>within 24 hours</strong>
       </p>
 
+      <!-- CTA -->
       <div style="margin:30px 0;text-align:center;">
         <a href="mailto:${ADMIN_EMAIL}"
-           style="background:#6B3FA0;color:#fff;padding:14px 22px;border-radius:999px;text-decoration:none;font-weight:bold;">
+           style="background:#6B3FA0;color:#fff;padding:14px 22px;border-radius:999px;text-decoration:none;font-weight:bold;box-shadow:0 8px 20px rgba(107,63,160,0.3);">
           Contact Support →
         </a>
       </div>
@@ -140,8 +140,10 @@ export const sendUserEmail = async ({ name, email }) => {
       <p style="font-size:13px;color:#777;text-align:center;">
         If urgent, feel free to reply directly to this email.
       </p>
+
     </div>
 
+    <!-- FOOTER -->
     <div style="padding:18px;text-align:center;font-size:12px;color:#777;background:#F5F3F8;">
       © ${new Date().getFullYear()} ${COMPANY_NAME}<br/>
       Supporting every child’s journey 💜
@@ -151,8 +153,7 @@ export const sendUserEmail = async ({ name, email }) => {
 </div>
 `,
     });
-
   } catch (error) {
-    console.error("❌ User Email Error:", error);
+    console.error("❌ User Email Error:", error.message);
   }
 };

@@ -10,6 +10,7 @@ const navLinks = [
   { label: "FAQ", to: "/faq" },
   { label: "Career", to: "/career" },
   { label: "Contact", to: "/contact-us" },
+  { label: "Getting Started", to: "/getting-started" },
   { label: "Kenya program", to: "/kenya" },
   { label: "Privacy policy", to: "/privacy-policy" },
 ];
